@@ -19,6 +19,11 @@ const routes: Array<RouteRecordRaw> = [
                 name: 'Dashboard',
                 component: Dashboard
             },
+            {
+                path: 'menu-crud',
+                name: 'MenuManager',
+                component: () => import('../pages/MenuManager.vue')
+            }
             // You can add more children here later like:
             // { path: 'orders', component: () => import('../pages/Orders.vue') }
         ]

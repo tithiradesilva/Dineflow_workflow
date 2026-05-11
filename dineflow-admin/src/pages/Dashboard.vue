@@ -2,7 +2,7 @@
   <div class="space-y-6">
     <!-- Top Header -->
     <div>
-      <h1 class="!text-3xl font-heading !font-bold text-secondary tracking-tight" style="font-weight: 700 !important;">Good Morning</h1>
+      <h1 class="!text-2xl font-heading !font-bold text-secondary tracking-tight" style="font-weight: 700 !important;">Good Morning</h1>
       <p class="text-[#494949] font-semibold">Welcome back, Admin. Here is what is happening at DineFlow.</p>
     </div>
 
