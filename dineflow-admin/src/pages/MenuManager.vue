@@ -14,7 +14,7 @@
           class="border-slate-200 hover:border-primary hover:text-primary rounded-xl font-bold shadow-sm flex items-center justify-center gap-2 h-12 px-5 transition-all text-slate-600"
           @click="openCategoryModal"
         >
-          <template #icon><PlusOutlined /></template>
+          <PlusOutlined />
           <span>Add Category</span>
         </a-button>
 
@@ -25,7 +25,7 @@
           class="bg-primary hover:bg-primary-dark border-none rounded-xl font-bold shadow-sm flex items-center justify-center gap-2 h-12 px-5 transition-all text-white"
           @click="openModal()"
         >
-          <template #icon><PlusOutlined /></template>
+          <PlusOutlined />
           <span>Add New Dish</span>
         </a-button>
       </div>
@@ -210,7 +210,7 @@
                 class="custom-height-btn w-12 flex items-center justify-center border-slate-200 hover:border-primary hover:text-primary rounded-lg text-slate-500 font-bold text-lg transition-all flex-none animate-none"
                 @click="decreasePrice"
               >
-                −
+                <MinusOutlined />
               </a-button>
               <a-input-number 
                 v-model:value="formState.price" 
@@ -226,7 +226,7 @@
                 class="custom-height-btn w-12 flex items-center justify-center border-slate-200 hover:border-primary hover:text-primary rounded-lg text-slate-500 font-bold text-lg transition-all flex-none animate-none"
                 @click="increasePrice"
               >
-                +
+                <PlusOutlined />
               </a-button>
             </div>
           </a-form-item>
@@ -391,6 +391,7 @@ import {
   EditOutlined, 
   DeleteOutlined, 
   PlusOutlined, 
+  MinusOutlined,
   PictureOutlined, 
   CheckOutlined 
 } from '@ant-design/icons-vue'
@@ -705,13 +706,20 @@ const handleSaveImage = () => {
   line-height: 1 !important;
 }
 
-/* Perfect alignment centering for any inner button text/icon wrappers */
-:deep(.custom-height-btn > span),
-:deep(.custom-height-btn .ant-btn-icon) {
+/* Perfect alignment centering for any button text/icon wrappers */
+:deep(.ant-btn) {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+:deep(.ant-btn .ant-btn-icon),
+:deep(.ant-btn .anticon) {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
   line-height: 1 !important;
+  margin-top: 0 !important;
 }
 
 /* Ensure the internal elements of Ant Design Select & InputNumber scale properly */
