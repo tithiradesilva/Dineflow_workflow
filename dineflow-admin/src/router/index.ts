@@ -23,9 +23,12 @@ const routes: Array<RouteRecordRaw> = [
                 path: 'menu-crud',
                 name: 'MenuManager',
                 component: () => import('../pages/MenuManager.vue')
+            },
+            {
+                path: 'orders',
+                name: 'Orders',
+                component: () => import('../pages/Orders.vue')
             }
-            // You can add more children here later like:
-            // { path: 'orders', component: () => import('../pages/Orders.vue') }
         ]
     }
 ]
@@ -33,6 +36,36 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
     history: createWebHistory(),
     routes
+})
+
+import { useAuthStore } from '../stores/authStore'
+import { authService } from '../services/authService'
+
+router.beforeEach(async (to, _from, next) => {
+  const authStore = useAuthStore()
+
+  // Auto-restore session from Supabase on page load/refresh
+  if (!authStore.user) {
+    try {
+      const currentUser = await authService.getCurrentUser()
+      if (currentUser) {
+        authStore.user = currentUser
+        authStore.isAuthenticated = true
+      }
+    } catch (e) {
+      console.error('Session recovery failed:', e)
+    }
+  }
+
+  const requireAuth = to.path !== '/login'
+
+  if (requireAuth && !authStore.isAuthenticated) {
+    next('/login')
+  } else if (to.path === '/login' && authStore.isAuthenticated) {
+    next('/')
+  } else {
+    next()
+  }
 })
 
 export default router

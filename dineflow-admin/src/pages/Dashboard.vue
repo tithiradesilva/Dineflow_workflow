@@ -22,7 +22,7 @@
           <div class="mt-4 text-xs font-medium" :class="stat.trendUp ? 'text-success' : 'text-slate-400'">
             <span v-if="stat.trendUp">↑ {{ stat.trend }}</span>
             <span v-else>{{ stat.trend }}</span>
-            <span class="text-slate-400 ml-1">vs yesterday</span>
+            <span class="text-slate-400 ml-1">{{ stat.trendLabel }}</span>
           </div>
         </a-card>
       </a-col>
@@ -58,6 +58,7 @@
             :columns="columns" 
             :data-source="filteredOrders" 
             :pagination="false"
+            :loading="isLoading"
             class="font-sans"
           >
             <template #bodyCell="{ column, record }">
@@ -148,11 +149,11 @@
             <div class="grid grid-cols-2 gap-3 pt-2">
               <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Avg Prep Time</p>
-                <p class="text-base font-bold text-secondary mt-0.5">14.2 min</p>
+                <p class="text-base font-bold text-secondary mt-0.5">{{ dbStats.avgPrepTime }}</p>
               </div>
               <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Efficiency</p>
-                <p class="text-base font-bold text-secondary mt-0.5">94.8%</p>
+                <p class="text-base font-bold text-secondary mt-0.5">{{ dbStats.efficiency }}</p>
               </div>
             </div>
           </div>
@@ -184,7 +185,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { message } from 'ant-design-vue'
 import { 
   DollarOutlined, 
@@ -192,17 +193,20 @@ import {
   UserOutlined, 
   FireOutlined 
 } from '@ant-design/icons-vue'
+import { orderService } from '../services/orderService'
 
-// --- DYNAMIC CALCULATIONS ---
-
-const mockOrders = ref([
-  { key: '1', id: '#ORD-001', table: 'Table 4', items: '2x Truffle Burger, 1x Cola', total: 45.50, status: 'Preparing' },
-  { key: '2', id: '#ORD-002', table: 'Table 12', items: '1x Caesar Salad, 2x Iced Tea', total: 28.00, status: 'Ready' },
-  { key: '3', id: '#ORD-003', table: 'Table 7', items: '4x Spicy Wings, 2x Craft Beer', total: 62.00, status: 'Delivered' },
-  { key: '4', id: '#ORD-004', table: 'Table 2', items: '1x Ribeye Steak, 1x Red Wine', total: 85.00, status: 'Preparing' },
-])
-
+const mockOrders = ref<any[]>([])
 const activeTab = ref('All')
+const isLoading = ref(false)
+
+const dbStats = ref({
+  activeOrders: 0,
+  revenue: 0,
+  customersCount: 0,
+  availableItemsCount: 0,
+  avgPrepTime: '0.0 min',
+  efficiency: '100.0%'
+})
 
 // Filtered array computed from the selected category tabs
 const filteredOrders = computed(() => {
@@ -210,12 +214,7 @@ const filteredOrders = computed(() => {
   return mockOrders.value.filter(order => order.status === activeTab.value)
 })
 
-const activityLogs = ref([
-  { time: '13:34', message: 'Order #ORD-004 sent to kitchen prep queue.' },
-  { time: '13:28', message: 'Table 12 marked as Ready (Order #ORD-002).' },
-  { time: '13:15', message: 'Waiter dispatched Table 7 (Order #ORD-003).' },
-  { time: '13:02', message: 'Order #ORD-001 received. Dispatched to Chef.' },
-])
+const activityLogs = ref<any[]>([])
 
 const columns = [
   { title: 'Order ID', dataIndex: 'id', key: 'id', width: '15%' },
@@ -236,18 +235,46 @@ const kitchenCapacity = computed(() => {
 
 // Dynamic stats computed reactively
 const activeOrdersCount = computed(() => mockOrders.value.filter(o => o.status !== 'Delivered').length)
-const dynamicRevenue = computed(() => mockOrders.value.reduce((acc, o) => acc + o.total, 0) + 1100)
+const dynamicRevenue = computed(() => dbStats.value.revenue)
 
 const statistics = computed(() => [
-  { title: 'Total Revenue', value: `$${dynamicRevenue.value.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`, icon: DollarOutlined, iconColor: 'text-green-500', trend: '12.5%', trendUp: true },
-  { title: 'Active Orders', value: activeOrdersCount.value.toString(), icon: ShoppingOutlined, iconColor: 'text-blue-500', trend: '5.2%', trendUp: true },
-  { title: 'Customers', value: '184', icon: UserOutlined, iconColor: 'text-purple-500', trend: 'Same', trendUp: false },
-  { title: 'Hot Items', value: '12', icon: FireOutlined, iconColor: 'text-primary', trend: '2.1%', trendUp: true },
+  { title: 'Total Revenue', value: `$${dynamicRevenue.value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, icon: DollarOutlined, iconColor: 'text-green-500', trend: 'Live', trendUp: true, trendLabel: 'revenue track' },
+  { title: 'Active Orders', value: activeOrdersCount.value.toString(), icon: ShoppingOutlined, iconColor: 'text-blue-500', trend: activeOrdersCount.value.toString(), trendUp: true, trendLabel: 'in kitchen queue' },
+  { title: 'Customers', value: dbStats.value.customersCount.toString(), icon: UserOutlined, iconColor: 'text-purple-500', trend: dbStats.value.customersCount.toString(), trendUp: false, trendLabel: 'active tables' },
+  { title: 'Hot Items', value: dbStats.value.availableItemsCount.toString(), icon: FireOutlined, iconColor: 'text-primary', trend: dbStats.value.availableItemsCount.toString(), trendUp: true, trendLabel: 'active menu items' },
 ])
 
-const advanceStatus = (key: string, nextStatus: 'Ready' | 'Delivered') => {
+let realTimeSubscription: any = null
+
+const fetchDashboardData = async (silent = false) => {
+  if (!silent) isLoading.value = true
+  try {
+    const orders = await orderService.getLiveOrders()
+    mockOrders.value = orders
+
+    const stats = await orderService.getDashboardStats()
+    dbStats.value = {
+      activeOrders: stats.activeOrders,
+      revenue: stats.revenue,
+      customersCount: stats.customersCount,
+      availableItemsCount: stats.availableItemsCount,
+      avgPrepTime: stats.avgPrepTime,
+      efficiency: stats.efficiency
+    }
+  } catch (error: any) {
+    message.error('Failed to load dashboard data: ' + error.message)
+  } finally {
+    if (!silent) isLoading.value = false
+  }
+}
+
+const advanceStatus = async (key: string, nextStatus: 'Ready' | 'Delivered') => {
+  const orderId = Number(key)
   const targetOrder = mockOrders.value.find(order => order.key === key)
-  if (targetOrder) {
+  if (!targetOrder) return
+
+  try {
+    await orderService.updateOrderStatus(orderId, nextStatus)
     targetOrder.status = nextStatus
 
     // Push new activity logs cleanly
@@ -262,8 +289,36 @@ const advanceStatus = (key: string, nextStatus: 'Ready' | 'Delivered') => {
     }
     
     activityLogs.value.unshift({ time: timeNow, message: logMsg })
+
+    // Refresh stats silently
+    const stats = await orderService.getDashboardStats()
+    dbStats.value = {
+      activeOrders: stats.activeOrders,
+      revenue: stats.revenue,
+      customersCount: stats.customersCount,
+      availableItemsCount: stats.availableItemsCount,
+      avgPrepTime: stats.avgPrepTime,
+      efficiency: stats.efficiency
+    }
+  } catch (error: any) {
+    message.error('Failed to update status: ' + error.message)
   }
 }
+
+onMounted(() => {
+  fetchDashboardData()
+
+  // Subscribe to real-time updates from database
+  realTimeSubscription = orderService.subscribeToLiveOrders(() => {
+    fetchDashboardData(true)
+  })
+})
+
+onUnmounted(() => {
+  if (realTimeSubscription) {
+    realTimeSubscription.unsubscribe()
+  }
+})
 </script>
 
 <style scoped>

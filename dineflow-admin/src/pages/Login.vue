@@ -134,6 +134,7 @@ const formState = reactive({
 const isSubmitting = ref(false)
 const loginSuccess = ref(false)
 
+/*
 // Auto-typing simulator for quick filling credentials cleanly (kept for auxiliary use/future development)
 const quickFill = (email: string, pass: string) => {
   formState.email = ''
@@ -164,6 +165,7 @@ const quickFill = (email: string, pass: string) => {
   
   typeEmail()
 }
+*/
 
 // Form Submission with REAL Supabase Auth
 const onFinish = async (values: any) => {

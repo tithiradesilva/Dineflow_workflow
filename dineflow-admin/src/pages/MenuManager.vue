@@ -33,9 +33,18 @@
 
     <!-- Table Section -->
     <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+      <!-- Category Filter Tabs -->
+      <div class="mb-6 border-b border-slate-100">
+        <a-tabs v-model:activeKey="selectedCategory">
+          <a-tab-pane key="All" tab="All Dishes" />
+          <a-tab-pane v-for="cat in categories" :key="cat" :tab="cat" />
+        </a-tabs>
+      </div>
+
       <a-table 
         :columns="columns" 
         :data-source="filteredMenuItems" 
+        :loading="isLoading" 
         :pagination="{ 
           pageSize: 5, 
           showSizeChanger: true, 
@@ -142,6 +151,7 @@
       cancelText="Cancel"
       centered
       :width="680"
+      :confirmLoading="isSaving"
       :okButtonProps="{ class: 'bg-primary border-none rounded-xl font-bold h-11 px-6 shadow-sm hover:opacity-90 transition-opacity' }"
       :cancelButtonProps="{ class: 'rounded-xl font-medium h-11 px-5 border-slate-200 hover:border-slate-300' }"
     >
@@ -276,6 +286,7 @@
       cancelText="Cancel"
       centered
       :width="460"
+      :confirmLoading="isSaving"
       :okButtonProps="{ class: 'bg-primary border-none rounded-xl font-bold h-11 px-6 shadow-sm hover:opacity-90 transition-opacity' }"
       :cancelButtonProps="{ class: 'rounded-xl font-medium h-11 px-5 border-slate-200 hover:border-slate-300' }"
     >
@@ -385,7 +396,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
 import { 
   EditOutlined, 
@@ -395,6 +406,7 @@ import {
   PictureOutlined, 
   CheckOutlined 
 } from '@ant-design/icons-vue'
+import { menuService } from '../services/menuService'
 
 // --- TABLE CONFIGURATION ---
 const columns = [
@@ -406,46 +418,31 @@ const columns = [
   { title: 'Actions', key: 'actions', align: 'right' as const }
 ]
 
-// --- CATEGORIES STATE ---
-const categories = ref(['Starters', 'Mains', 'Desserts', 'Beverages'])
+// --- STATE ---
+const categories = ref<string[]>([])
 const selectedCategory = ref('All')
+const mockMenuItems = ref<any[]>([])
+const isLoading = ref(false)
+const isSaving = ref(false)
 
-// --- MOCK DATA ---
-const mockMenuItems = ref([
-  { 
-    id: 1, 
-    name: 'Truffle Burger', 
-    description: 'Wagyu beef, truffle aioli, brioche bun.', 
-    category: 'Mains', 
-    price: 24.50, 
-    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=300&q=80',
-    is_available: true,
-    track_stock: true,
-    quantity: 45
-  },
-  { 
-    id: 2, 
-    name: 'Caesar Salad', 
-    description: 'Crispy romaine, parmesan, garlic croutons.', 
-    category: 'Starters', 
-    price: 12.00, 
-    image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=300&q=80',
-    is_available: true,
-    track_stock: false,
-    quantity: -1
-  },
-  { 
-    id: 3, 
-    name: 'Molten Chocolate Cake', 
-    description: 'Served with vanilla bean ice cream.', 
-    category: 'Desserts', 
-    price: 9.50, 
-    image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=300&q=80',
-    is_available: false,
-    track_stock: true,
-    quantity: 0
-  },
-])
+const loadData = async () => {
+  isLoading.value = true
+  try {
+    const fetchedCategories = await menuService.getCategories()
+    categories.value = fetchedCategories.map(c => c.name)
+
+    const fetchedItems = await menuService.getMenuItems()
+    mockMenuItems.value = fetchedItems
+  } catch (error: any) {
+    message.error('Failed to load menu data: ' + error.message)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+onMounted(() => {
+  loadData()
+})
 
 // --- FILTERED MENU ITEMS ---
 const filteredMenuItems = computed(() => {
@@ -511,7 +508,7 @@ const openModal = (record?: any) => {
   isModalVisible.value = true
 }
 
-const handleSave = () => {
+const handleSave = async () => {
   if (!formState.name || !formState.category || formState.price <= 0) {
     message.error('Please fill in all required fields.')
     return
@@ -522,11 +519,9 @@ const handleSave = () => {
     formState.is_available = false
   }
 
-  if (modalMode.value === 'add') {
-    const newId = mockMenuItems.value.length ? Math.max(...mockMenuItems.value.map(i => i.id)) + 1 : 1
-    
-    mockMenuItems.value.unshift({
-      id: newId,
+  isSaving.value = true
+  try {
+    const itemData = {
       name: formState.name,
       category: formState.category,
       price: formState.price,
@@ -535,25 +530,37 @@ const handleSave = () => {
       is_available: formState.is_available,
       track_stock: formState.track_stock,
       quantity: formState.track_stock ? formState.quantity : -1
-    })
-  } else {
-    const index = mockMenuItems.value.findIndex(item => item.id === formState.id)
-    if (index !== -1) {
-      mockMenuItems.value[index] = { 
-        ...formState,
-        image: formState.image || 'https://images.unsplash.com/photo-1495521821757-a1efb6729352?auto=format&fit=crop&w=300&q=80',
-        quantity: formState.track_stock ? formState.quantity : -1 
-      } as any
     }
-  }
 
-  isModalVisible.value = false
-  message.success(`Dish successfully ${modalMode.value === 'add' ? 'created' : 'updated'}!`)
+    if (modalMode.value === 'add') {
+      const newItem = await menuService.createMenuItem(itemData)
+      mockMenuItems.value.unshift(newItem)
+    } else {
+      if (formState.id !== null) {
+        const updatedItem = await menuService.updateMenuItem(formState.id, itemData)
+        const index = mockMenuItems.value.findIndex(item => item.id === formState.id)
+        if (index !== -1) {
+          mockMenuItems.value[index] = updatedItem
+        }
+      }
+    }
+    isModalVisible.value = false
+    message.success(`Dish successfully ${modalMode.value === 'add' ? 'created' : 'updated'}!`)
+  } catch (error: any) {
+    message.error('Failed to save dish: ' + error.message)
+  } finally {
+    isSaving.value = false
+  }
 }
 
-const handleDelete = (id: number) => {
-  mockMenuItems.value = mockMenuItems.value.filter(item => item.id !== id)
-  message.success('Dish deleted successfully.')
+const handleDelete = async (id: number) => {
+  try {
+    await menuService.deleteMenuItem(id)
+    mockMenuItems.value = mockMenuItems.value.filter(item => item.id !== id)
+    message.success('Dish deleted successfully.')
+  } catch (error: any) {
+    message.error('Failed to delete dish: ' + error.message)
+  }
 }
 
 // --- ADD CATEGORY POPUP STATE ---
@@ -565,7 +572,7 @@ const openCategoryModal = () => {
   isCategoryModalVisible.value = true
 }
 
-const handleSaveCategory = () => {
+const handleSaveCategory = async () => {
   const trimmed = newCategoryName.value.trim()
   if (!trimmed) {
     message.error('Please enter a category name.')
@@ -575,9 +582,18 @@ const handleSaveCategory = () => {
     message.error('Category already exists.')
     return
   }
-  categories.value.push(trimmed)
-  message.success(`Category "${trimmed}" added successfully.`)
-  isCategoryModalVisible.value = false
+
+  isSaving.value = true
+  try {
+    await menuService.addCategory(trimmed)
+    categories.value.push(trimmed)
+    message.success(`Category "${trimmed}" added successfully.`)
+    isCategoryModalVisible.value = false
+  } catch (error: any) {
+    message.error('Failed to create category: ' + error.message)
+  } finally {
+    isSaving.value = false
+  }
 }
 
 // --- IMAGE SELECTOR POPUP STATE ---
