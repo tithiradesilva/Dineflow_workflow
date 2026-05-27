@@ -1,0 +1,107 @@
+// =============================================================
+// ProductCard.scss — Styles for a single menu item card
+// Used on: HomePage (featured), ProductsPage (grid)
+// =============================================================
+
+.product-card {
+  @include card;
+  overflow: hidden;
+  cursor: pointer;
+  transition: $transition-base;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $shadow-lg;
+  }
+
+  // Food image at the top
+  &__image-wrap {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    background: $color-border;  // fallback if image is missing
+    flex-shrink: 0;
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+
+    .product-card:hover & {
+      transform: scale(1.05);   // subtle zoom on hover
+    }
+  }
+
+  // Category badge overlaid on the image
+  &__badge {
+    position: absolute;
+    top: $space-3;
+    left: $space-3;
+    @include badge(rgba(255,255,255,0.9), $color-secondary);
+    backdrop-filter: blur(4px);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  // Card body (below the image)
+  &__body {
+    padding: $space-4;
+    @include flex-col($space-3);
+    flex: 1;
+  }
+
+  &__name {
+    font-family: $font-heading;
+    font-size: $text-base;
+    font-weight: 700;
+    color: $color-secondary;
+    line-height: 1.3;
+  }
+
+  &__desc {
+    font-size: $text-sm;
+    color: $text-light;
+    line-height: 1.5;
+    // Clamp to 2 lines max
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  // Footer row: price + add button
+  &__footer {
+    @include flex-row;
+    justify-content: space-between;
+    margin-top: auto;
+  }
+
+  &__price {
+    font-family: $font-heading;
+    font-size: $text-xl;
+    font-weight: 800;
+    color: $color-primary;
+  }
+
+  &__add-btn {
+    @include btn-primary;
+    padding: $space-2 $space-4;
+    font-size: $text-sm;
+    border-radius: $radius-md;
+  }
+
+  // Out-of-stock overlay state
+  &--unavailable {
+    opacity: 0.6;
+    pointer-events: none;
+
+    .product-card__add-btn {
+      background: $text-light;
+    }
+  }
+}

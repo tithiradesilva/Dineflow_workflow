@@ -1,0 +1,180 @@
+// =============================================================
+// TheNavbar.scss — Styles for the top navigation bar
+// All values come from _variables.scss (auto-injected by vite).
+// =============================================================
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  height: $navbar-height;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);      // frosted glass effect
+  border-bottom: 1px solid $color-border;
+  box-shadow: $shadow-sm;
+
+  // Inner container: logo + nav links + cart icon
+  &__inner {
+    @include container;
+    @include flex-row($space-6);
+    justify-content: space-between;
+    height: 100%;
+  }
+
+  // Brand logo area
+  &__brand {
+    @include flex-row($space-2);
+    flex-shrink: 0;
+    cursor: pointer;
+    text-decoration: none;
+
+    &-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: $radius-md;
+      background: linear-gradient(135deg, $color-primary, #f87171);
+      @include flex-center;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 12px rgba($color-primary, 0.25);
+      flex-shrink: 0;
+    }
+
+    &-name {
+      font-family: $font-heading;
+      font-size: $text-xl;
+      font-weight: 800;
+      color: $color-secondary;
+      letter-spacing: -0.5px;
+    }
+  }
+
+  // Desktop navigation links
+  &__links {
+    @include flex-row($space-1);
+    display: none;  // hidden on mobile
+
+    @include md {
+      display: flex;
+    }
+  }
+
+  // Individual nav link
+  &__link {
+    padding: $space-2 $space-4;
+    border-radius: $radius-md;
+    font-size: $text-sm;
+    font-weight: 600;
+    color: $text-muted;
+    cursor: pointer;
+    transition: $transition-base;
+    text-decoration: none;
+
+    &:hover {
+      color: $color-secondary;
+      background: rgba($color-secondary, 0.05);
+    }
+
+    // Active link (current page)
+    &--active {
+      color: $color-primary;
+      background: rgba($color-primary, 0.07);
+    }
+  }
+
+  // Right side: cart + mobile hamburger
+  &__actions {
+    @include flex-row($space-3);
+    flex-shrink: 0;
+  }
+
+  // Cart button with badge
+  &__cart {
+    @include flex-row($space-2);
+    @include btn-reset;
+    padding: $space-2 $space-4;
+    border-radius: $radius-md;
+    background: $color-primary;
+    color: #fff;
+    font-size: $text-sm;
+    transition: $transition-base;
+
+    &:hover {
+      background: $color-primary-dark;
+      transform: translateY(-1px);
+    }
+
+    // Cart item count badge
+    &-badge {
+      min-width: 20px;
+      height: 20px;
+      border-radius: $radius-full;
+      background: #fff;
+      color: $color-primary;
+      font-size: 11px;
+      font-weight: 800;
+      @include flex-center;
+      padding: 0 $space-1;
+    }
+  }
+
+  // Mobile hamburger button
+  &__hamburger {
+    @include btn-reset;
+    @include flex-center;
+    width: 40px;
+    height: 40px;
+    border-radius: $radius-md;
+    color: $color-secondary;
+    transition: $transition-base;
+    display: flex;
+
+    @include md {
+      display: none;   // hidden on desktop
+    }
+
+    &:hover {
+      background: $color-border;
+    }
+  }
+
+  // Mobile dropdown menu
+  &__mobile-menu {
+    display: none;
+    position: absolute;
+    top: $navbar-height;
+    left: 0;
+    right: 0;
+    background: $color-surface;
+    border-bottom: 1px solid $color-border;
+    box-shadow: $shadow-lg;
+    padding: $space-4;
+    @include flex-col($space-2);
+
+    &--open {
+      display: flex;
+    }
+
+    @include md {
+      display: none !important;  // never show on desktop
+    }
+  }
+
+  // Mobile nav link (larger tap target)
+  &__mobile-link {
+    display: block;
+    padding: $space-3 $space-4;
+    border-radius: $radius-md;
+    font-size: $text-base;
+    font-weight: 600;
+    color: $text-muted;
+    cursor: pointer;
+    transition: $transition-base;
+    text-decoration: none;
+
+    &:hover, &--active {
+      color: $color-primary;
+      background: rgba($color-primary, 0.07);
+    }
+  }
+}

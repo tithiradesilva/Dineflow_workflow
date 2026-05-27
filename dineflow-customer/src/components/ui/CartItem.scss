@@ -1,0 +1,106 @@
+// =============================================================
+// CartItem.scss — Styles for a single cart item row
+// Used on: CartPage
+// =============================================================
+
+.cart-item {
+  @include flex-row($space-4);
+  padding: $space-4;
+  background: $color-surface;
+  border-radius: $radius-lg;
+  border: 1px solid $color-border;
+  transition: $transition-fast;
+
+  &:hover {
+    border-color: darken($color-border, 5%);
+  }
+
+  // Food thumbnail
+  &__image {
+    width: 72px;
+    height: 72px;
+    border-radius: $radius-md;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 1px solid $color-border;
+  }
+
+  // Name + price info
+  &__info {
+    @include flex-col($space-1);
+    flex: 1;
+    min-width: 0;    // allows text truncation inside flex
+  }
+
+  &__name {
+    font-weight: 700;
+    font-size: $text-base;
+    color: $color-secondary;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__unit-price {
+    font-size: $text-sm;
+    color: $text-light;
+  }
+
+  // Quantity controls: − [n] +
+  &__controls {
+    @include flex-row($space-2);
+    flex-shrink: 0;
+  }
+
+  &__qty-btn {
+    @include btn-reset;
+    width: 32px;
+    height: 32px;
+    border-radius: $radius-md;
+    border: 1.5px solid $color-border;
+    color: $color-secondary;
+    font-size: $text-lg;
+    font-weight: 700;
+    @include flex-center;
+    transition: $transition-fast;
+
+    &:hover {
+      border-color: $color-primary;
+      color: $color-primary;
+      background: rgba($color-primary, 0.05);
+    }
+  }
+
+  &__qty {
+    min-width: 24px;
+    text-align: center;
+    font-weight: 700;
+    font-size: $text-base;
+    color: $color-secondary;
+  }
+
+  // Subtotal + remove
+  &__right {
+    @include flex-col($space-2);
+    align-items: flex-end;
+    flex-shrink: 0;
+  }
+
+  &__subtotal {
+    font-family: $font-heading;
+    font-weight: 800;
+    font-size: $text-lg;
+    color: $color-primary;
+  }
+
+  &__remove {
+    @include btn-reset;
+    font-size: $text-xs;
+    color: $text-light;
+    transition: $transition-fast;
+
+    &:hover {
+      color: $color-danger;
+    }
+  }
+}

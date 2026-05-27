@@ -1,9 +1,7 @@
 <script setup lang="ts">
-// Logic goes here later
+// App root — just wraps the router view inside a page shell
 </script>
 
 <template>
-  <div class="min-h-screen bg-background font-sans text-secondary">
-    <router-view /> 
-  </div>
+  <router-view />
 </template>

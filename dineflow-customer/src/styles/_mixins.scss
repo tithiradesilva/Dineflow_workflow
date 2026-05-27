@@ -1,0 +1,144 @@
+// =============================================================
+// DINEFLOW CUSTOMER — Reusable Mixins
+// Use these instead of repeating the same CSS patterns.
+// Example: @include flex-center; → centers an element
+// =============================================================
+
+@use 'variables' as *;
+
+// --- Layout Helpers ---
+
+// Center content with flexbox (both axes)
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Horizontally align items in a row
+@mixin flex-row($gap: $space-4) {
+  display: flex;
+  align-items: center;
+  gap: $gap;
+}
+
+// Stack items vertically
+@mixin flex-col($gap: $space-4) {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}
+
+// --- Card Pattern ---
+// Standard white card with border + shadow
+@mixin card($radius: $radius-lg, $shadow: $shadow-md) {
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius;
+  box-shadow: $shadow;
+}
+
+// --- Button Base ---
+// Apply on a <button> to remove default styles
+@mixin btn-reset {
+  appearance: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: $font-body;
+  font-size: $text-sm;
+  font-weight: 600;
+  padding: 0;
+  line-height: 1;
+}
+
+// Primary filled button style
+@mixin btn-primary {
+  @include btn-reset;
+  background: $color-primary;
+  color: #fff;
+  padding: $space-3 $space-6;
+  border-radius: $radius-md;
+  transition: $transition-base;
+
+  &:hover {
+    background: $color-primary-dark;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba($color-primary, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+// Ghost/outline button style
+@mixin btn-outline {
+  @include btn-reset;
+  background: transparent;
+  color: $color-primary;
+  border: 1.5px solid $color-primary;
+  padding: $space-3 $space-6;
+  border-radius: $radius-md;
+  transition: $transition-base;
+
+  &:hover {
+    background: rgba($color-primary, 0.06);
+  }
+}
+
+// --- Responsive Breakpoints ---
+// Usage: @include md { ... }
+@mixin sm {
+  @media (min-width: #{$bp-sm}) { @content; }
+}
+@mixin md {
+  @media (min-width: #{$bp-md}) { @content; }
+}
+@mixin lg {
+  @media (min-width: #{$bp-lg}) { @content; }
+}
+@mixin xl {
+  @media (min-width: #{$bp-xl}) { @content; }
+}
+
+// --- Text Truncation ---
+@mixin truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// --- Section Container ---
+// Standard max-width + centered content wrapper
+@mixin container {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: $space-4;
+  padding-right: $space-4;
+
+  @include md {
+    padding-left: $space-6;
+    padding-right: $space-6;
+  }
+}
+
+// --- Badge (status pill) ---
+@mixin badge($bg, $color) {
+  display: inline-flex;
+  align-items: center;
+  padding: $space-1 $space-3;
+  border-radius: $radius-full;
+  background: $bg;
+  color: $color;
+  font-size: $text-xs;
+  font-weight: 700;
+}

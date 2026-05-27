@@ -1,0 +1,41 @@
+// =============================================================
+// DINEFLOW CUSTOMER — Main Stylesheet Entry Point
+// Imports all SCSS partials in the correct order:
+//   1. Reset (browser normalization)
+//   2. Variables (design tokens)
+//   3. Typography (fonts + heading rules)
+//   4. Animations (shared keyframes)
+//
+// Components import variables/mixins individually with @use.
+// =============================================================
+
+@use 'reset';
+@use 'variables' as *;
+@use 'typography';
+@use 'animations';
+
+// --- Global Layout Shell ---
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+// --- Global Section Padding Helper ---
+// Apply .section to any <section> for consistent vertical rhythm
+.section {
+  padding: $space-16 0;
+}
+
+// --- Container Utility ---
+// Use .container on wrappers to get max-width + centered padding
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 $space-4;
+
+  @media (min-width: 768px) {
+    padding: 0 $space-6;
+  }
+}

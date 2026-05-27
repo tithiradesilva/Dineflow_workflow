@@ -1,0 +1,203 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useRouter } from 'vue-router'
+import CartItem from '@/components/ui/CartItem.vue'
+import { useCartStore } from '@/stores/cartStore'
+
+const router = useRouter()
+const cart   = useCartStore()
+
+// Convenience: check if cart is empty
+const isEmpty = computed(() => cart.items.length === 0)
+
+// Tax rate (5%) and total with tax
+const tax   = computed(() => cart.totalPrice * 0.05)
+const grand = computed(() => cart.totalPrice + tax.value)
+</script>
+
+<template>
+  <div class="cart-page">
+    <div class="container">
+
+      <!-- Page Title -->
+      <div class="cart-page__header">
+        <h1 class="cart-page__title">Your Cart</h1>
+        <p class="cart-page__sub">Review your items before checking out.</p>
+      </div>
+
+      <!-- Empty Cart State -->
+      <div v-if="isEmpty" class="cart-page__empty">
+        <span class="cart-page__empty-icon">🛒</span>
+        <h2>Your cart is empty</h2>
+        <p>Add some delicious items from our menu.</p>
+        <button class="cart-page__browse-btn" @click="router.push('/products')">
+          Browse Menu →
+        </button>
+      </div>
+
+      <!-- Cart Content -->
+      <div v-else class="cart-page__content">
+
+        <!-- Left: Cart Items List -->
+        <div class="cart-page__items">
+          <CartItem
+            v-for="item in cart.items"
+            :key="item.id"
+            :item="item"
+          />
+        </div>
+
+        <!-- Right: Order Summary Panel -->
+        <aside class="cart-page__summary">
+          <h2 class="cart-page__summary-title">Order Summary</h2>
+
+          <div class="cart-page__summary-rows">
+            <div class="cart-page__summary-row">
+              <span>Subtotal</span>
+              <span>${{ cart.totalPrice.toFixed(2) }}</span>
+            </div>
+            <div class="cart-page__summary-row">
+              <span>Tax (5%)</span>
+              <span>${{ tax.toFixed(2) }}</span>
+            </div>
+            <div class="cart-page__summary-row cart-page__summary-row--total">
+              <span>Total</span>
+              <span>${{ grand.toFixed(2) }}</span>
+            </div>
+          </div>
+
+          <button
+            class="cart-page__checkout-btn"
+            @click="router.push('/checkout')"
+          >
+            Proceed to Checkout →
+          </button>
+
+          <button
+            class="cart-page__continue-btn"
+            @click="router.push('/products')"
+          >
+            ← Continue Shopping
+          </button>
+        </aside>
+
+      </div>
+    </div>
+  </div>
+</template>
+
+<style lang="scss" scoped>
+.cart-page {
+  padding: $space-10 0 $space-16;
+
+  &__header {
+    margin-bottom: $space-8;
+  }
+
+  &__title { margin-bottom: $space-1; }
+  &__sub   { color: $text-muted; }
+
+  // Empty state
+  &__empty {
+    @include flex-col($space-4);
+    align-items: center;
+    text-align: center;
+    padding: $space-16 0;
+
+    h2 { font-size: $text-2xl; }
+    p  { color: $text-muted; }
+  }
+
+  &__empty-icon {
+    font-size: 4rem;
+    line-height: 1;
+  }
+
+  &__browse-btn {
+    @include btn-primary;
+    padding: $space-3 $space-8;
+    font-size: $text-base;
+    border-radius: $radius-lg;
+    margin-top: $space-4;
+  }
+
+  // Two-column layout: items list + summary panel
+  &__content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $space-8;
+    align-items: flex-start;
+
+    @include lg {
+      grid-template-columns: 1fr 380px;
+    }
+  }
+
+  // Cart items list
+  &__items {
+    @include flex-col($space-4);
+  }
+
+  // Summary panel (sticky on desktop)
+  &__summary {
+    @include card($radius-xl, $shadow-md);
+    padding: $space-6;
+
+    @include lg {
+      position: sticky;
+      top: calc(#{$navbar-height} + #{$space-6});
+    }
+  }
+
+  &__summary-title {
+    font-size: $text-xl;
+    margin-bottom: $space-6;
+    padding-bottom: $space-4;
+    border-bottom: 1px solid $color-border;
+  }
+
+  &__summary-rows {
+    @include flex-col($space-3);
+    margin-bottom: $space-6;
+  }
+
+  &__summary-row {
+    @include flex-row;
+    justify-content: space-between;
+    font-size: $text-sm;
+    color: $text-muted;
+
+    &--total {
+      font-family: $font-heading;
+      font-size: $text-xl;
+      font-weight: 800;
+      color: $color-secondary;
+      padding-top: $space-3;
+      border-top: 1px solid $color-border;
+
+      span:last-child { color: $color-primary; }
+    }
+  }
+
+  &__checkout-btn {
+    @include btn-primary;
+    width: 100%;
+    padding: $space-4;
+    font-size: $text-base;
+    border-radius: $radius-lg;
+    margin-bottom: $space-3;
+  }
+
+  &__continue-btn {
+    @include btn-reset;
+    width: 100%;
+    text-align: center;
+    font-size: $text-sm;
+    color: $text-muted;
+    padding: $space-2;
+    transition: $transition-fast;
+
+    &:hover { color: $color-secondary; }
+  }
+}
+</style>

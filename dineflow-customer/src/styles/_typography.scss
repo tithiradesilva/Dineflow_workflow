@@ -1,0 +1,39 @@
+// =============================================================
+// DINEFLOW CUSTOMER — Typography
+// Global heading and body text rules using design tokens.
+// =============================================================
+
+@use 'variables' as *;
+
+body {
+  font-family: $font-body;
+  font-size: $text-base;
+  color: $text-primary;
+  background-color: $color-background;
+}
+
+// Headings use Poppins (the brand heading font)
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-heading;
+  font-weight: 700;
+  color: $color-secondary;
+}
+
+h1 { font-size: $text-3xl; }
+h2 { font-size: $text-2xl; }
+h3 { font-size: $text-xl; }
+h4 { font-size: $text-lg; }
+h5 { font-size: $text-base; }
+h6 { font-size: $text-sm; }
+
+p {
+  line-height: 1.7;
+  color: $text-muted;
+}
+
+// Utility text classes (use sparingly in templates)
+.text-muted   { color: $text-muted; }
+.text-primary { color: $color-primary; }
+.text-accent  { color: $color-accent; }
+.font-bold    { font-weight: 700; }
+.font-semibold { font-weight: 600; }

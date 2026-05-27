@@ -1,0 +1,49 @@
+// =============================================================
+// DINEFLOW CUSTOMER — Shared Animations
+// Reusable keyframe animations. Apply via class or @include.
+// =============================================================
+
+// Fade in from transparent (used on page/component mount)
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// Slide up from below (used for modals, cards)
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// Slide in from right (used for cart drawer)
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+// Gentle pulse (used for loading/live indicators)
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+// Spin (used for loading spinners)
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+// Shake (used for form validation errors)
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25%       { transform: translateX(-4px); }
+  75%       { transform: translateX(4px); }
+}
+
+// --- Utility Animation Classes ---
+// Apply these directly in templates when needed
+.anim-fade-in    { animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.anim-slide-up   { animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.anim-slide-right { animation: slideInRight 0.3s ease forwards; }
+.anim-pulse      { animation: pulse 2s infinite; }
+.anim-spin       { animation: spin 1s linear infinite; }
