@@ -10,10 +10,7 @@ const router = useRouter()
 
       <!-- Logo -->
       <div class="footer__brand" @click="router.push('/')">
-        <div class="footer__brand-logo">
-          <span class="footer__brand-text-1">Delicious</span>
-          <span class="footer__brand-text-2">&amp; Tasty</span>
-        </div>
+        <img class="footer__logo-img" src="@/assets/logoOriginal.png" alt="Dineflow Logo" />
       </div>
 
       <!-- Links Column -->
@@ -62,24 +59,11 @@ const router = useRouter()
     }
   }
 
-  &__brand-logo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    // font-family: 'Satisfy', cursive;
-    color: #fff;
-    line-height: 1.1;
-  }
-
-  &__brand-text-1 {
-    font-size: 2.5rem;
-    font-weight: 400;
-  }
-
-  &__brand-text-2 {
-    font-size: 2.1rem;
-    font-weight: 400;
-    margin-top: -0.25rem;
+  &__logo-img {
+    height: 70px; /* Visually balanced height for the footer logo */
+    width: auto;
+    object-fit: contain;
+    display: block;
   }
 
   &__column {

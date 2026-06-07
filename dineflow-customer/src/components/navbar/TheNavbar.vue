@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useCartStore } from '@/stores/cartStore'
 
@@ -26,21 +26,48 @@ const navLinks = [
   { label: 'About Us',   path: '/about' },
   { label: 'Contact Us', path: '/contact' }
 ]
+
+// Dynamic transparency logic on scroll
+const isScrolled = ref(false)
+
+function handleScroll() {
+  if (route.path === '/') {
+    isScrolled.value = window.scrollY > 60
+  } else {
+    isScrolled.value = true
+  }
+}
+
+// Reset state on route change
+watch(
+  () => route.path,
+  (newPath) => {
+    if (newPath !== '/') {
+      isScrolled.value = true
+    } else {
+      isScrolled.value = window.scrollY > 60
+    }
+  },
+  { immediate: true }
+)
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll, { passive: true })
+  handleScroll()
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
 </script>
 
 <template>
-  <header class="navbar">
+  <header class="navbar" :class="{ 'navbar--transparent': !isScrolled }">
     <div class="navbar__inner">
 
       <!-- Brand Logo (Left) -->
       <a class="navbar__brand" @click="navigate('/')">
-        <div class="navbar__brand-icon">
-          <!-- Premium Chef Cloche / Food Cover SVG Icon -->
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="brand-svg">
-            <path d="M12 2v2M5 12h14M19 12a7 7 0 0 0-14 0h14zM12 21a2 2 0 0 0 2-2H10a2 2 0 0 0 2 2z" />
-          </svg>
-        </div>
-        <span class="navbar__brand-name">DineFlow</span>
+        <img class="navbar__logo-img" src="@/assets/logoOriginal.png" alt="DineFlow Logo" />
       </a>
 
       <!-- Desktop Nav Links (Center) -->
@@ -125,6 +152,55 @@ const navLinks = [
   background: #ffffff;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+
+  // Transparent variant when scroll is at top on homepage
+  &--transparent {
+    background: transparent;
+    border-bottom: none;
+    box-shadow: none;
+
+    .navbar__link {
+      color: rgba(255, 255, 255, 0.85);
+
+      &:hover {
+        color: #ffffff;
+      }
+
+      &--active {
+        color: #ffffff;
+      }
+    }
+
+    .navbar__language {
+      color: rgba(255, 255, 255, 0.85);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .navbar__language-chevron {
+        color: rgba(255, 255, 255, 0.85);
+      }
+    }
+
+    .navbar__action-btn {
+      color: rgba(255, 255, 255, 0.85);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: #ffffff;
+      }
+    }
+
+    .navbar__hamburger {
+      color: rgba(255, 255, 255, 0.85);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
 
   &__inner {
     @include container;
@@ -135,34 +211,22 @@ const navLinks = [
   }
 
   &__brand {
-    @include flex-row($space-2);
+    display: flex;
+    align-items: center;
     flex-shrink: 0;
     cursor: pointer;
     text-decoration: none;
-  }
-
-  &__brand-icon {
-    width: 38px;
-    height: 38px;
-    border-radius: $radius-full;
-    background: linear-gradient(135deg, #ff7e5f, #ff4e50);
-    @include flex-center;
-    box-shadow: 0 4px 10px rgba(#ff4e50, 0.2);
-    flex-shrink: 0;
-    color: #ffffff;
-
-    .brand-svg {
-      width: 20px;
-      height: 20px;
+    @include md {
+      flex: 1;
+      justify-content: flex-start;
     }
   }
 
-  &__brand-name {
-    font-family: $font-heading;
-    font-size: 1.3rem;
-    font-weight: 800;
-    color: #1f2937;
-    letter-spacing: -0.5px;
+  &__logo-img {
+    height: 52px; /* Visually balanced larger size for original logo */
+    width: auto;
+    object-fit: contain;
+    display: block;
   }
 
   // Centered navigation links on desktop
@@ -171,7 +235,8 @@ const navLinks = [
     @include md {
       display: flex;
       gap: $space-8;
-      margin: 0 auto;
+      justify-content: center;
+      flex: 0 0 auto;
     }
   }
 
@@ -202,6 +267,10 @@ const navLinks = [
     align-items: center;
     gap: $space-4;
     flex-shrink: 0;
+    @include md {
+      flex: 1;
+      justify-content: flex-end;
+    }
   }
 
   // Language switcher

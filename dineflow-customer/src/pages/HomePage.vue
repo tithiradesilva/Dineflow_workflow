@@ -126,15 +126,15 @@ const router = useRouter()
             <div class="about__photo-card about__photo-card--back">
               <img
                 class="about__img"
-                src="@/assets/restaurant_storefront.png"
-                alt="House of Döner restaurant exterior"
+                src="@/assets/ShopImage.png"
+                alt="House of Döner restaurant interior"
               />
             </div>
             <div class="about__photo-card about__photo-card--front">
               <img
                 class="about__img"
-                src="@/assets/restaurant_storefront.png"
-                alt="House of Döner storefront close-up"
+                src="@/assets/ShopImage.png"
+                alt="House of Döner restaurant interior"
               />
             </div>
           </div>
@@ -187,7 +187,9 @@ const router = useRouter()
 // ============================================================
 .hero {
   position: relative;
-  min-height: 85vh;
+  min-height: 100vh;
+  margin-top: -$navbar-height;
+  padding-top: $navbar-height;
   // Deep overlay over a blurred background food image
   background:
     linear-gradient(to bottom, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.5) 60%, rgba(0, 0, 0, 0.75) 100%),
@@ -206,7 +208,7 @@ const router = useRouter()
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
-    min-height: 80vh;
+    min-height: 90vh;
   }
 
   &__content {
@@ -373,7 +375,7 @@ const router = useRouter()
 // ============================================================
 .about {
   background: #ffffff;
-  padding: $space-16 0;
+  padding: $space-16 0 90px;
 
   &__eyebrow {
     text-align: center;
@@ -439,39 +441,27 @@ const router = useRouter()
 
   &__photo-card {
     position: absolute;
-    background: #ffffff;
-    padding: $space-3 $space-3 $space-10 $space-3;
-    border-radius: $radius-sm;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    border-radius: $radius-lg;
+    overflow: hidden;
+    box-shadow: $shadow-lg;
     transition: transform 0.3s ease;
-
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: $space-3;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: $text-xs;
-      color: #9ca3af;
-      font-weight: 600;
-    }
   }
 
   &__photo-card--back {
-    width: 250px;
-    height: 220px;
-    top: $space-6;
+    width: 290px;
+    height: 250px;
+    top: 0;
     left: 0;
-    transform: rotate(-7deg);
+    transform: rotate(-6deg);
     z-index: 1;
   }
 
   &__photo-card--front {
-    width: 250px;
-    height: 220px;
+    width: 290px;
+    height: 250px;
     right: 0;
-    bottom: $space-6;
-    transform: rotate(5deg);
+    bottom: 0;
+    transform: rotate(4deg);
     z-index: 2;
   }
 
@@ -479,7 +469,6 @@ const router = useRouter()
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 2px;
   }
 }
 
@@ -488,15 +477,15 @@ const router = useRouter()
 // ============================================================
 .mobile-app {
   background: #ffffff;
-  padding: $space-12 0 $space-20;
+  padding: 100px 0 80px;
 
   &__card {
     background: #f7f7f7; // Light premium grey background card
     border-radius: $radius-xl;
-    padding: $space-12 clamp($space-6, 6vw, $space-16);
+    padding: $space-12 clamp($space-6, 6vw, $space-16) $space-10;
     display: grid;
     grid-template-columns: 1fr;
-    gap: $space-10;
+    gap: $space-8;
     align-items: center;
     position: relative;
     overflow: visible;
@@ -528,10 +517,10 @@ const router = useRouter()
 
   &__desc {
     font-size: $text-lg;
-    color: #4b5563;
+    color: #474747;
     line-height: 1.6;
     margin-bottom: $space-4;
-    font-weight: 500;
+    font-weight: 650;
   }
 
   &__notice {
@@ -563,7 +552,7 @@ const router = useRouter()
     display: block;
     object-fit: contain;
     mix-blend-mode: multiply;
-    margin: -15px -10px; /* Offset the large transparent margins of the PNG assets */
+    margin: -15px -10px -40px -10px; /* Offset the large transparent margins of the PNG assets */
   }
 
   &__image-wrap {
@@ -575,15 +564,15 @@ const router = useRouter()
 
     @include lg {
       position: absolute;
-      right: $space-12;
+      right: $space-8;
       bottom: 0;
-      width: 320px;
+      width: 350px;
       height: 125%; // Overflow card container upwards
     }
   }
 
   &__iphone {
-    max-width: 280px;
+    max-width: 320px;
     width: 100%;
     height: auto;
     object-fit: contain;
