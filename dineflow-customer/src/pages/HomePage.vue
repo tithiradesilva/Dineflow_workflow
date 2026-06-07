@@ -40,10 +40,10 @@ const router = useRouter()
           <!-- Feature 1 -->
           <div class="hero__feature">
             <div class="hero__feature-icon-wrap">
-              <svg class="hero__feature-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polyline points="12 6 12 12 16 14"></polyline>
-                <path d="M12 2v2M12 20v2M20 12h2M2 12h2"></path>
+              <svg class="hero__feature-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="13" r="8"></circle>
+                <path d="M12 9v4l2 2"></path>
+                <path d="M12 2v3M10 2h4"></path>
               </svg>
             </div>
             <div class="hero__feature-text">
@@ -312,43 +312,41 @@ const router = useRouter()
 
   // Bottom Features Bar
   &__features {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: $space-6;
-    padding: $space-8 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+    padding: $space-10 0;
     border-top: 1px solid rgba(255, 255, 255, 0.15);
     margin-bottom: $space-6;
-
-    @include sm {
-      grid-template-columns: repeat(2, 1fr);
-    }
-    @include lg {
-      grid-template-columns: repeat(4, 1fr);
-      gap: $space-2;
-    }
+    width: 100%;
   }
 
   &__feature {
     display: flex;
     align-items: center;
-    gap: $space-3.5;
+    gap: 16px;
+    flex: 1 1 230px;
+    justify-content: center;
   }
 
   &__feature-icon-wrap {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
+    width: 50px;
+    height: 50px;
     border-radius: $radius-full;
     color: #ee5a13;
     flex-shrink: 0;
   }
 
   &__feature-svg {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     stroke: #ee5a13;
+    stroke-width: 2.2;
   }
 
   &__feature-text {
@@ -357,15 +355,15 @@ const router = useRouter()
   }
 
   &__feature-sub {
-    font-size: 0.725rem;
+    font-size: 13px;
     color: rgba(255, 255, 255, 0.75);
-    margin-bottom: 2px;
+    margin-bottom: 3px;
     font-weight: 500;
   }
 
   &__feature-label {
-    font-size: $text-sm;
-    font-weight: 700;
+    font-size: 17px;
+    font-weight: 750;
     color: #ffffff;
   }
 }
