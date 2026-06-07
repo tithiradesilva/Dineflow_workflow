@@ -380,7 +380,7 @@ const router = useRouter()
   &__eyebrow {
     text-align: center;
     font-family: $font-heading;
-    font-size: $text-base;
+    font-size: $text-lg;
     font-weight: 700;
     color: #6b7280;
     margin-bottom: $space-2;

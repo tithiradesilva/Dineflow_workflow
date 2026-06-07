@@ -259,7 +259,7 @@ onMounted(loadMenu)
 
   &__category-count {
     font-family: $font-heading;
-    font-size: $text-sm;
+    font-size: 1.0rem;
     font-weight: 700;
     color: #f97316;
     letter-spacing: 0.5px;
@@ -278,7 +278,7 @@ onMounted(loadMenu)
   // Search box styling
   &__search-wrap {
     position: relative;
-    max-width: 680px;
+    max-width: 380px;
     margin: 0 auto;
     display: flex;
     align-items: center;
