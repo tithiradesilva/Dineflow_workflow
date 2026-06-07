@@ -71,16 +71,18 @@ const fallbackImage = 'https://images.unsplash.com/photo-1568901346375-23c9450c5
   display: flex;
   flex-direction: column;
   gap: 0;
+  margin-top: 30px;
 
   // Image has its own rounded corners — key feature of this design
   &__image-wrap {
     width: 100%;
-    height: 195px;
+    aspect-ratio: 1 / 1;
     border-radius: 10px;
     overflow: hidden;
     background: #e5e7eb;
     flex-shrink: 0;
     transition: opacity 0.2s ease;
+    margin-bottom: 4px;
 
     .product-card:hover & {
       opacity: 0.95;
@@ -110,18 +112,19 @@ const fallbackImage = 'https://images.unsplash.com/photo-1568901346375-23c9450c5
 
   &__name {
     font-family: $font-heading;
-    font-size: 1rem;
-    font-weight: 700;
+    font-size: 1.3rem;
+    font-weight: 800;
     color: #111827;
     line-height: 1.3;
-    margin: 0 0 4px;
+    margin: 10px 0 12px;
   }
 
   &__desc {
     font-family: $font-body;
-    font-size: 0.82rem;
-    color: #9ca3af;
-    line-height: 1.45;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #6d6d6d;
+    line-height: 36px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -140,7 +143,7 @@ const fallbackImage = 'https://images.unsplash.com/photo-1568901346375-23c9450c5
   // Orange bold price — "$ 22.23" with a space
   &__price {
     font-family: $font-heading;
-    font-size: 1.15rem;
+    font-size: 1.6rem;
     font-weight: 800;
     color: #f97316;
     letter-spacing: 0;
@@ -152,8 +155,8 @@ const fallbackImage = 'https://images.unsplash.com/photo-1568901346375-23c9450c5
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 42px;
-    height: 42px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     background: #f97316;
     color: #ffffff;
@@ -180,8 +183,8 @@ const fallbackImage = 'https://images.unsplash.com/photo-1568901346375-23c9450c5
   }
 
   .cart-icon {
-    width: 17px;
-    height: 17px;
+    width: 22px;
+    height: 22px;
   }
 
   // Small "+" superscript at top-right of the cart

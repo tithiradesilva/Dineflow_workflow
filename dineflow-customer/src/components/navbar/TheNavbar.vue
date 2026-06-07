@@ -242,9 +242,9 @@ onUnmounted(() => {
 
   &__link {
     font-family: $font-body;
-    font-size: $text-sm;
-    font-weight: 550;
-    color: #555555;
+    font-size: 1.0rem;
+    font-weight: 700;
+    color: #939393;
     cursor: pointer;
     transition: $transition-fast;
     text-decoration: none;
@@ -257,7 +257,7 @@ onUnmounted(() => {
 
     &--active {
       color: #000000;
-      font-weight: 700;
+      font-weight: 800;
     }
   }
 
@@ -279,7 +279,7 @@ onUnmounted(() => {
     align-items: center;
     gap: $space-1;
     font-family: $font-body;
-    font-size: $text-sm;
+    font-size: 1.0rem;
     font-weight: 600;
     color: #333333;
     cursor: pointer;

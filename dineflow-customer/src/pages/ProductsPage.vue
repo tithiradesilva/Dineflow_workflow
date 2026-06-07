@@ -227,7 +227,8 @@ onMounted(loadMenu)
           </div>
 
           <div v-if="groupedItems[cat.name]?.length === 0" class="products-page__empty-cat">
-            No items available in this category.
+            <img src="@/assets/EmptyItemsIcon.png" alt="No items" class="products-page__empty-icon" />
+            <span class="products-page__empty-text">No items available in this category.</span>
           </div>
 
           <div v-else class="products-page__grid">
@@ -463,19 +464,19 @@ onMounted(loadMenu)
 
   &__section-title {
     font-family: $font-heading;
-    font-size: 1.6rem;
+    font-size: 1.9rem;
     font-weight: 800;
     color: #111827;
-    margin: 0 0 4px;
+    margin: 0 0 10px;
   }
 
   &__section-desc {
     font-family: $font-body;
-    font-size: $text-sm;
-    font-weight: 400;
-    color: #6b7280;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #6d6d6d;
     margin: 0;
-    font-style: italic;
+    margin-top: 16px;
   }
 
   // Products grid (4 columns layout matching reference)
@@ -492,18 +493,36 @@ onMounted(loadMenu)
 
   &__empty,
   &__empty-cat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     padding: $space-12;
     color: #6b7280;
     background: #ffffff;
     border-radius: $radius-lg;
-    border: 1px solid rgba(0, 0, 0, 0.03);
+    // border: 1px solid rgba(0, 0, 0, 0.03);
+  }
+
+  &__empty-icon {
+    width: 180px;
+    height: auto;
+    opacity: 0.35;
   }
 
   &__empty span {
     font-size: 2.5rem;
     display: block;
     margin-bottom: $space-3;
+  }
+
+  &__empty-text {
+    font-family: $font-heading;
+    font-size: 1.0rem;
+    font-weight: 600;
+    color: #5f5f5f;
+    opacity: 0.5;
   }
 
   &__error {

@@ -74,17 +74,17 @@ const router = useRouter()
 
   &__col-title {
     font-family: $font-heading;
-    font-size: $text-sm;
+    font-size: 1.2rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.9);
     letter-spacing: 0.5px;
     margin-bottom: $space-1;
   }
 
   &__link {
     font-family: $font-body;
-    font-size: $text-sm;
-    color: rgba(255, 255, 255, 0.55);
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.7);
     cursor: pointer;
     transition: $transition-fast;
     text-decoration: none;
