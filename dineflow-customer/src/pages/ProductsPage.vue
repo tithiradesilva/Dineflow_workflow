@@ -200,8 +200,8 @@ onMounted(loadMenu)
         <p class="products-page__section-desc">Found {{ searchResults.length }} items matching your criteria.</p>
         
         <div v-if="searchResults.length === 0" class="products-page__empty">
-          <span>🍽️</span>
-          <p>No food items match your search. Try another word.</p>
+          <img src="@/assets/EmptyItemsIcon.png" alt="No items found" class="products-page__empty-icon" />
+          <p class="products-page__empty-text">No food items match your search. Try another word.</p>
         </div>
         
         <div v-else class="products-page__grid">
@@ -457,6 +457,24 @@ onMounted(loadMenu)
     }
   }
 
+  // Results section styling
+  &__results-section {
+    padding-top: $space-6;
+    
+    .products-page__section-title {
+      font-size: 1.5rem;
+      margin-top: 30px;
+      margin-bottom: 20px;
+    }
+
+    .products-page__section-desc {
+      font-size: 1.1rem;
+      margin-top: 4px;
+      margin-bottom: 24px;
+      font-weight: 700;
+    }
+  }
+
   // Section styling for category groupings
   &__section {
     padding-top: $space-8;
@@ -469,7 +487,7 @@ onMounted(loadMenu)
 
   &__section-title {
     font-family: $font-heading;
-    font-size: 1.9rem;
+    font-size: 1.55rem;
     font-weight: 800;
     color: #111827;
     margin: 0 0 10px;
@@ -477,7 +495,7 @@ onMounted(loadMenu)
 
   &__section-desc {
     font-family: $font-body;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: #6d6d6d;
     margin: 0;
@@ -525,9 +543,10 @@ onMounted(loadMenu)
   &__empty-text {
     font-family: $font-heading;
     font-size: 1.0rem;
-    font-weight: 600;
-    color: #5f5f5f;
-    opacity: 0.5;
+    font-weight: 650;
+    color: #4b5563;
+    opacity: 0.85;
+    margin-top: 12px;
   }
 
   &__error {
