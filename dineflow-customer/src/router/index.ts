@@ -30,11 +30,6 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/pages/CheckoutPage.vue')
       },
       {
-        path: 'about',
-        name: 'About',
-        component: () => import('@/pages/AboutUs.vue')
-      },
-      {
         path: 'contact',
         name: 'Contact',
         component: () => import('@/pages/ContactUs.vue')

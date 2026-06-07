@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useCartStore } from '@/stores/cartStore'
 
@@ -19,11 +19,10 @@ function navigate(path: string) {
   mobileOpen.value = false
 }
 
-// Nav links config aligned with the screenshot: Home, Shop, About Us, Contact Us
+// Nav links config aligned with the screenshot: Home, Shop, Contact Us
 const navLinks = [
   { label: 'Home',       path: '/' },
   { label: 'Shop',       path: '/products' },
-  { label: 'About Us',   path: '/about' },
   { label: 'Contact Us', path: '/contact' }
 ]
 

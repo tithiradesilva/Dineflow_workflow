@@ -273,6 +273,8 @@ onMounted(loadMenu)
     font-weight: 800;
     color: #1f2937;
     margin: 0 0 $space-6;
+    margin-top: 10px;
+    margin-bottom: 40px;
   }
 
   // Search box styling
