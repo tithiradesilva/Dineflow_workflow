@@ -60,7 +60,7 @@ const router = useRouter()
   }
 
   &__logo-img {
-    height: 70px; /* Visually balanced height for the footer logo */
+    height: 90px; /* Visually balanced height for the footer logo */
     width: auto;
     object-fit: contain;
     display: block;
@@ -75,19 +75,20 @@ const router = useRouter()
   &__col-title {
     font-family: $font-heading;
     font-size: 1.2rem;
-    font-weight: 600;
+    font-weight: 700;
     color: rgba(255, 255, 255, 0.9);
     letter-spacing: 0.5px;
-    margin-bottom: $space-1;
+    margin-bottom: 16px;
   }
 
   &__link {
     font-family: $font-body;
-    font-size: 1.1rem;
+    font-size: 1.0rem;
     color: rgba(255, 255, 255, 0.7);
     cursor: pointer;
     transition: $transition-fast;
     text-decoration: none;
+    font-weight: 650;
 
     &:hover {
       color: #fff;
@@ -109,9 +110,10 @@ const router = useRouter()
 
   &__bottom-text {
     font-family: $font-body;
-    font-size: $text-xs;
-    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.9rem;
+    color: rgba(240, 240, 240, 0.518);
     text-align: center;
+    font-weight: 700;
   }
 }
 </style>

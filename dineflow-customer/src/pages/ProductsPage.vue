@@ -137,7 +137,7 @@ onMounted(loadMenu)
             v-model="searchQuery"
             class="products-page__search"
             type="text"
-            placeholder="Search our delicious items..."
+            placeholder="Search items"
           />
         </div>
       </div>
@@ -278,10 +278,11 @@ onMounted(loadMenu)
   // Search box styling
   &__search-wrap {
     position: relative;
-    max-width: 480px;
+    max-width: 680px;
     margin: 0 auto;
     display: flex;
     align-items: center;
+    margin-bottom: 20px;
   }
 
   &__search-icon {
@@ -294,17 +295,18 @@ onMounted(loadMenu)
   }
 
   &__search {
+    color: #313131;
     width: 100%;
-    padding: 0.75rem $space-5 0.75rem 2.75rem;
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 0.95rem $space-5 0.95rem 2.75rem;
+    border: 2px solid rgba(0, 0, 0, 0.08);
     border-radius: $radius-full;
     font-family: $font-body;
-    font-size: $text-sm;
+    font-size: 1.0rem;
     outline: none;
     transition: $transition-base;
-    background: #fdfdfd;
-    color: #1f2937;
+    background: #fafafa;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+    font-weight: 600;
 
     &:focus {
       border-color: #f97316;
@@ -390,8 +392,8 @@ onMounted(loadMenu)
   }
 
   &__category-circle {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
     border: 2.5px solid #e5e7eb;        // gray ring — inactive
     background: #f3f4f6;                // light gray fill — inactive
@@ -408,18 +410,21 @@ onMounted(loadMenu)
 
   &__category-name {
     font-family: $font-heading;
-    font-size: 0.85rem;
+    font-size: 1.05rem;
     font-weight: 700;
     color: #111827; // black for inactive
     transition: color 0.2s ease;
     line-height: 1.2;
+    margin-top: 8px;
   }
 
   &__category-count-sub {
     font-family: $font-body;
-    font-size: 11px;
+    font-size: 0.9rem;
     color: #9ca3af; // gray for inactive
     transition: color 0.2s ease;
+    margin-top: 5px;
+    font-weight: 700;
   }
 
   // Orange underline bar below inactive (hidden)
