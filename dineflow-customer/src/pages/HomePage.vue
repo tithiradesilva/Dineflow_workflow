@@ -1,29 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import ProductCard from '@/components/ui/ProductCard.vue'
-import { menuService } from '@/services/menuService'
-import type { MenuItem } from '@/services/menuService'
 
-const router  = useRouter()
-const isLoading = ref(true)
-const featuredItems = ref<MenuItem[]>([])
-const error = ref('')
-
-// Fetch a limited set of items for the homepage "featured" section
-async function loadFeatured() {
-  try {
-    const all = await menuService.getMenuItems()
-    // Show up to 6 items on the homepage
-    featuredItems.value = all.slice(0, 6)
-  } catch (e: any) {
-    error.value = 'Could not load menu. Please try again.'
-  } finally {
-    isLoading.value = false
-  }
-}
-
-onMounted(loadFeatured)
+const router = useRouter()
 </script>
 
 <template>
@@ -31,104 +9,170 @@ onMounted(loadFeatured)
 
     <!-- ===== HERO SECTION ===== -->
     <section class="hero">
-      <div class="hero__inner container">
-        <div class="hero__text anim-fade-in">
-          <span class="hero__label">🍳 Fresh · Fast · Delicious</span>
-          <h1 class="hero__title">Order from your<br /><span class="hero__title--accent">table, instantly.</span></h1>
-          <p class="hero__desc">Browse our menu, add what you love, and place your order — no waiting for a waiter.</p>
-          <div class="hero__actions">
-            <button class="hero__cta" @click="router.push('/products')">View Full Menu →</button>
-            <button class="hero__cta-ghost" @click="router.push('/cart')">View Cart</button>
+      <div class="hero__inner">
+        <div class="hero__content anim-fade-in">
+          <p class="hero__eyebrow">Explore your</p>
+          <h1 class="hero__title">
+            <span class="hero__title--accent">Favorite</span> Food.
+          </h1>
+          <div class="hero__search">
+            <div class="hero__search-wrap">
+              <input
+                id="address-input"
+                class="hero__search-input"
+                type="text"
+                placeholder="Enter your Address"
+              />
+              <span class="hero__search-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2C7.58 2 4 5.58 4 10c0 5.25 8 12 8 12s8-6.75 8-12c0-4.42-3.58-8-8-8z" fill="#ee5a13"/>
+                  <circle cx="12" cy="10" r="3.5" fill="#ffffff"/>
+                  <circle cx="12" cy="10" r="1.5" fill="#ee5a13"/>
+                </svg>
+              </span>
+            </div>
+            <button class="hero__order-btn" @click="router.push('/products')">Order</button>
           </div>
         </div>
-        <div class="hero__image-wrap anim-slide-right">
-          <div class="hero__image-blob"></div>
-          <img
-            class="hero__image"
-            src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=700&q=80"
-            alt="Delicious food"
-          />
+
+        <!-- ===== FEATURES STRIP ===== -->
+        <div class="hero__features">
+          <!-- Feature 1 -->
+          <div class="hero__feature">
+            <div class="hero__feature-icon-wrap">
+              <svg class="hero__feature-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+                <path d="M12 2v2M12 20v2M20 12h2M2 12h2"></path>
+              </svg>
+            </div>
+            <div class="hero__feature-text">
+              <p class="hero__feature-sub">Delivery in 30 Minutes</p>
+              <p class="hero__feature-label">Fast Delivery</p>
+            </div>
+          </div>
+
+          <!-- Feature 2 -->
+          <div class="hero__feature">
+            <div class="hero__feature-icon-wrap">
+              <svg class="hero__feature-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+            </div>
+            <div class="hero__feature-text">
+              <p class="hero__feature-sub">Your payments are Secured</p>
+              <p class="hero__feature-label">Secure Payments</p>
+            </div>
+          </div>
+
+          <!-- Feature 3 -->
+          <div class="hero__feature">
+            <div class="hero__feature-icon-wrap">
+              <svg class="hero__feature-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+              </svg>
+            </div>
+            <div class="hero__feature-text">
+              <p class="hero__feature-sub">Make an order easily</p>
+              <p class="hero__feature-label">Easy Ordering</p>
+            </div>
+          </div>
+
+          <!-- Feature 4 -->
+          <div class="hero__feature">
+            <div class="hero__feature-icon-wrap">
+              <svg class="hero__feature-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+              </svg>
+            </div>
+            <div class="hero__feature-text">
+              <p class="hero__feature-sub">Order with our best price</p>
+              <p class="hero__feature-label">Amazing Deals</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ===== STATS STRIP ===== -->
-    <section class="stats">
+    <!-- ===== ABOUT US SECTION ===== -->
+    <section class="about">
       <div class="container">
-        <div class="stats__grid">
-          <div class="stats__item">
-            <span class="stats__num">50+</span>
-            <span class="stats__label">Menu Items</span>
+        <p class="about__eyebrow">About Us</p>
+        <h2 class="about__heading">
+          “<span class="about__heading--orange">Fresh and Delicious</span> Food to your <span class="about__heading--orange">Doorstep</span>”
+        </h2>
+        <div class="about__body">
+          <div class="about__text">
+            <p>
+              <strong class="about__highlight">Founded in 2019</strong>, the House of Döner has quickly become a
+              national phenomenon. With over 120 locations, primarily in
+              Germany.
+            </p>
+            <p>
+              Founded in 2019, the House of Döner has quickly become a national phenomenon.
+              <strong class="about__highlight">With over 120 locations</strong>, primarily in
+              Germany, as well as some in the Netherlands, London, Istanbul, and Saudi Arabia,
+              we attract not only lovers of hearty street food but also curious foodies seeking
+              a unique taste experience.
+            </p>
           </div>
-          <div class="stats__item">
-            <span class="stats__num">2 min</span>
-            <span class="stats__label">Avg Order Time</span>
-          </div>
-          <div class="stats__item">
-            <span class="stats__num">100%</span>
-            <span class="stats__label">Fresh Ingredients</span>
-          </div>
-          <div class="stats__item">
-            <span class="stats__num">⭐ 4.9</span>
-            <span class="stats__label">Customer Rating</span>
+          <div class="about__images">
+            <!-- Overlapping, tilted images matching polaroid style -->
+            <div class="about__photo-card about__photo-card--back">
+              <img
+                class="about__img"
+                src="@/assets/restaurant_storefront.png"
+                alt="House of Döner restaurant exterior"
+              />
+            </div>
+            <div class="about__photo-card about__photo-card--front">
+              <img
+                class="about__img"
+                src="@/assets/restaurant_storefront.png"
+                alt="House of Döner storefront close-up"
+              />
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ===== FEATURED MENU SECTION ===== -->
-    <section class="section featured">
+    <!-- ===== MOBILE APP SECTION ===== -->
+    <section class="mobile-app">
       <div class="container">
-        <div class="featured__header">
-          <div>
-            <h2 class="featured__title">Featured Items</h2>
-            <p class="featured__sub">Our most loved dishes, freshly prepared.</p>
+        <div class="mobile-app__card">
+          <div class="mobile-app__content">
+            <h2 class="mobile-app__title">
+              Switch to our <span class="mobile-app__title--orange">Mobile App</span>
+            </h2>
+            <p class="mobile-app__desc">
+              Hot & fast – order easily online for delivery, pickup, or visit us in-store.
+            </p>
+            <p class="mobile-app__notice">
+              We look forward to seeing you !
+            </p>
+            <div class="mobile-app__badges">
+              <!-- Google Play Badge -->
+              <a href="#" class="mobile-app__badge-link" aria-label="Get it on Google Play">
+                <img class="mobile-app__badge-img" src="@/assets/Play Store 1.png" alt="Get it on Google Play" />
+              </a>
+              <!-- App Store Badge -->
+              <a href="#" class="mobile-app__badge-link" aria-label="Download on the App Store">
+                <img class="mobile-app__badge-img" src="@/assets/App Store 1.png" alt="Download on the App Store" />
+              </a>
+            </div>
           </div>
-          <button class="featured__view-all" @click="router.push('/products')">
-            See all →
-          </button>
-        </div>
-
-        <!-- Loading skeleton -->
-        <div v-if="isLoading" class="featured__grid">
-          <div v-for="n in 6" :key="n" class="skeleton-card"></div>
-        </div>
-
-        <!-- Error state -->
-        <div v-else-if="error" class="featured__error">{{ error }}</div>
-
-        <!-- Product cards grid -->
-        <div v-else class="featured__grid">
-          <ProductCard
-            v-for="item in featuredItems"
-            :key="item.id"
-            :item="item"
-          />
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== HOW IT WORKS SECTION ===== -->
-    <section class="section how">
-      <div class="container">
-        <h2 class="how__title">How it works</h2>
-        <div class="how__steps">
-          <div class="how__step">
-            <div class="how__step-icon">📖</div>
-            <h3 class="how__step-label">Browse the Menu</h3>
-            <p class="how__step-desc">Explore all available dishes by category.</p>
-          </div>
-          <div class="how__step-arrow">→</div>
-          <div class="how__step">
-            <div class="how__step-icon">🛒</div>
-            <h3 class="how__step-label">Add to Cart</h3>
-            <p class="how__step-desc">Pick what you want, adjust quantities.</p>
-          </div>
-          <div class="how__step-arrow">→</div>
-          <div class="how__step">
-            <div class="how__step-icon">✅</div>
-            <h3 class="how__step-label">Place Order</h3>
-            <p class="how__step-desc">Confirm your table number and submit. Done!</p>
+          <div class="mobile-app__image-wrap">
+            <img
+              class="mobile-app__iphone"
+              src="@/assets/IMG_8380-left 1.png"
+              alt="Dineflow mobile app on iPhone"
+            />
           </div>
         </div>
       </div>
@@ -138,238 +182,420 @@ onMounted(loadFeatured)
 </template>
 
 <style lang="scss" scoped>
-// --- Hero ---
+// ============================================================
+// HERO SECTION
+// ============================================================
 .hero {
-  background: linear-gradient(135deg, $color-muted 0%, #fff 60%);
-  padding: $space-16 0 $space-12;
+  position: relative;
+  min-height: 85vh;
+  // Deep overlay over a blurred background food image
+  background:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.5) 60%, rgba(0, 0, 0, 0.75) 100%),
+    url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1600&q=80') center / cover no-repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
   overflow: hidden;
 
   &__inner {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 $space-6;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    min-height: 80vh;
+  }
+
+  &__content {
+    margin-top: auto;
+    margin-bottom: auto;
+    max-width: 650px;
+    padding: $space-16 0;
+  }
+
+  &__eyebrow {
+    font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: $space-1;
+    letter-spacing: -0.5px;
+  }
+
+  &__title {
+    font-family: $font-heading;
+    font-size: clamp(3.5rem, 8vw, 5.5rem);
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.15;
+    margin-bottom: $space-8;
+    letter-spacing: -1.5px;
+
+    &--accent {
+      color: #ee5a13; // Deep orange brand color from screenshot
+    }
+  }
+
+  // Address Search Row
+  &__search {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  &__search-wrap {
+    position: relative;
+    flex: 0 0 380px;
+    max-width: 100%;
+  }
+
+  &__search-input {
+    width: 100%;
+    height: 50px;
+    padding: 0 46px 0 20px;
+    border-radius: 9999px;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    background: #ffffff;
+    color: #1f2937;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
+
+    &::placeholder {
+      color: #a8a8a8;
+      font-weight: 500;
+    }
+  }
+
+  &__search-icon {
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  &__order-btn {
+    width: 120px;
+    height: 50px;
+    background: #ee5a13;
+    color: #ffffff;
+    border: none;
+    border-radius: 9999px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(238, 90, 19, 0.25);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background: #d4490b;
+      transform: translateY(-1px);
+    }
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  // Bottom Features Bar
+  &__features {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: $space-6;
+    padding: $space-8 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    margin-bottom: $space-6;
+
+    @include sm {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @include lg {
+      grid-template-columns: repeat(4, 1fr);
+      gap: $space-2;
+    }
+  }
+
+  &__feature {
+    display: flex;
+    align-items: center;
+    gap: $space-3.5;
+  }
+
+  &__feature-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: $radius-full;
+    color: #ee5a13;
+    flex-shrink: 0;
+  }
+
+  &__feature-svg {
+    width: 32px;
+    height: 32px;
+    stroke: #ee5a13;
+  }
+
+  &__feature-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__feature-sub {
+    font-size: 0.725rem;
+    color: rgba(255, 255, 255, 0.75);
+    margin-bottom: 2px;
+    font-weight: 500;
+  }
+
+  &__feature-label {
+    font-size: $text-sm;
+    font-weight: 700;
+    color: #ffffff;
+  }
+}
+
+// ============================================================
+// ABOUT US SECTION
+// ============================================================
+.about {
+  background: #ffffff;
+  padding: $space-16 0;
+
+  &__eyebrow {
+    text-align: center;
+    font-family: $font-heading;
+    font-size: $text-base;
+    font-weight: 700;
+    color: #6b7280;
+    margin-bottom: $space-2;
+    letter-spacing: 0.05em;
+  }
+
+  &__heading {
+    font-family: $font-heading;
+    font-size: clamp(1.8rem, 4.5vw, 2.75rem);
+    font-weight: 800;
+    color: #111827;
+    text-align: center;
+    margin-bottom: $space-16;
+    line-height: 1.25;
+
+    &--orange {
+      color: #ee5a13;
+    }
+  }
+
+  &__body {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $space-12;
+    align-items: center;
+
+    @include lg {
+      grid-template-columns: 1.1fr 0.9fr;
+    }
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: $space-6;
+
+    p {
+      font-size: $text-lg;
+      color: #111827;
+      line-height: 1.75;
+      font-weight: 700;
+      line-height: 45px;
+    }
+  }
+
+  &__highlight {
+    color: #ee5a13;
+    font-weight: 750;
+  }
+
+  &__images {
+    position: relative;
+    height: 380px;
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
+  }
+
+  &__photo-card {
+    position: absolute;
+    background: #ffffff;
+    padding: $space-3 $space-3 $space-10 $space-3;
+    border-radius: $radius-sm;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: $space-3;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: $text-xs;
+      color: #9ca3af;
+      font-weight: 600;
+    }
+  }
+
+  &__photo-card--back {
+    width: 250px;
+    height: 220px;
+    top: $space-6;
+    left: 0;
+    transform: rotate(-7deg);
+    z-index: 1;
+  }
+
+  &__photo-card--front {
+    width: 250px;
+    height: 220px;
+    right: 0;
+    bottom: $space-6;
+    transform: rotate(5deg);
+    z-index: 2;
+  }
+
+  &__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 2px;
+  }
+}
+
+// ============================================================
+// MOBILE APP SECTION
+// ============================================================
+.mobile-app {
+  background: #ffffff;
+  padding: $space-12 0 $space-20;
+
+  &__card {
+    background: #f7f7f7; // Light premium grey background card
+    border-radius: $radius-xl;
+    padding: $space-12 clamp($space-6, 6vw, $space-16);
     display: grid;
     grid-template-columns: 1fr;
     gap: $space-10;
     align-items: center;
+    position: relative;
+    overflow: visible;
 
     @include lg {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1.2fr 0.8fr;
+      min-height: 320px;
     }
   }
 
-  &__text { @include flex-col($space-5); }
-
-  &__label {
-    display: inline-block;
-    padding: $space-1 $space-3;
-    border-radius: $radius-full;
-    background: rgba($color-primary, 0.1);
-    color: $color-primary;
-    font-size: $text-sm;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    width: fit-content;
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   &__title {
     font-family: $font-heading;
     font-size: clamp(2rem, 5vw, 3rem);
     font-weight: 800;
-    color: $color-secondary;
+    color: #111827;
+    margin-bottom: $space-4;
     line-height: 1.15;
 
-    &--accent { color: $color-primary; }
+    &--orange {
+      color: #ee5a13;
+    }
   }
 
   &__desc {
     font-size: $text-lg;
-    color: $text-muted;
-    max-width: 420px;
-    line-height: 1.7;
+    color: #4b5563;
+    line-height: 1.6;
+    margin-bottom: $space-4;
+    font-weight: 500;
   }
 
-  &__actions { @include flex-row($space-3); flex-wrap: wrap; }
-
-  &__cta {
-    @include btn-primary;
-    padding: $space-3 $space-8;
-    font-size: $text-base;
-    border-radius: $radius-lg;
+  &__notice {
+    font-size: $text-lg;
+    font-weight: 700;
+    color: #ee5a13;
+    margin-bottom: $space-8;
   }
 
-  &__cta-ghost {
-    @include btn-outline;
-    padding: $space-3 $space-6;
-    font-size: $text-base;
-    border-radius: $radius-lg;
+  &__badges {
+    display: flex;
+    align-items: center;
+    gap: $space-4;
+    flex-wrap: wrap;
   }
 
-  &__image-wrap {
-    position: relative;
-    @include flex-center;
-    display: none;
+  &__badge-link {
+    display: inline-block;
+    transition: transform 0.2s ease;
 
-    @include lg { display: flex; }
-  }
-
-  &__image-blob {
-    position: absolute;
-    width: 380px;
-    height: 380px;
-    border-radius: 60% 40% 55% 45% / 45% 55% 45% 55%;
-    background: linear-gradient(135deg, rgba($color-primary, 0.12), rgba($color-accent, 0.08));
-  }
-
-  &__image {
-    width: 340px;
-    height: 340px;
-    object-fit: cover;
-    border-radius: 50%;
-    position: relative;
-    z-index: 1;
-    box-shadow: $shadow-xl;
-  }
-}
-
-// --- Stats Strip ---
-.stats {
-  background: $color-secondary;
-  padding: $space-8 0;
-
-  &__grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: $space-6;
-
-    @include md {
-      grid-template-columns: repeat(4, 1fr);
+    &:hover {
+      transform: translateY(-2px);
     }
   }
 
-  &__item {
-    @include flex-col($space-1);
-    align-items: center;
-    text-align: center;
+  &__badge-img {
+    height: 120px;
+    width: auto;
+    display: block;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+    margin: -15px -10px; /* Offset the large transparent margins of the PNG assets */
   }
 
-  &__num {
-    font-family: $font-heading;
-    font-size: $text-2xl;
-    font-weight: 800;
-    color: #fff;
-  }
-
-  &__label {
-    font-size: $text-sm;
-    color: rgba(255,255,255,0.55);
-  }
-}
-
-// --- Featured Section ---
-.featured {
-  background: $color-background;
-
-  &__header {
-    @include flex-row;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: $space-8;
-    flex-wrap: wrap;
-    gap: $space-4;
-  }
-
-  &__title {
-    font-size: $text-2xl;
-    margin-bottom: $space-1;
-  }
-
-  &__sub {
-    color: $text-muted;
-    font-size: $text-sm;
-  }
-
-  &__view-all {
-    @include btn-outline;
-    padding: $space-2 $space-5;
-  }
-
-  &__grid {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: $space-6;
-
-    @include sm { grid-template-columns: repeat(2, 1fr); }
-    @include lg { grid-template-columns: repeat(3, 1fr); }
-  }
-
-  &__error {
-    text-align: center;
-    color: $color-danger;
-    padding: $space-8;
-  }
-}
-
-// Skeleton loading card
-.skeleton-card {
-  height: 320px;
-  border-radius: $radius-lg;
-  background: linear-gradient(90deg, $color-border 25%, #edf0f3 50%, $color-border 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.4s infinite;
-}
-
-@keyframes shimmer {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
-// --- How it Works ---
-.how {
-  background: $color-muted;
-
-  &__title {
-    text-align: center;
-    margin-bottom: $space-10;
-  }
-
-  &__steps {
+  &__image-wrap {
     display: flex;
-    align-items: center;
     justify-content: center;
-    flex-wrap: wrap;
-    gap: $space-4;
-  }
-
-  &__step {
-    @include card($radius-lg, $shadow-sm);
-    padding: $space-6;
-    text-align: center;
-    max-width: 220px;
-    @include flex-col($space-3);
     align-items: center;
+    width: 100%;
+    height: 100%;
+
+    @include lg {
+      position: absolute;
+      right: $space-12;
+      bottom: 0;
+      width: 320px;
+      height: 125%; // Overflow card container upwards
+    }
   }
 
-  &__step-icon {
-    font-size: 2.5rem;
-    line-height: 1;
-  }
+  &__iphone {
+    max-width: 280px;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
 
-  &__step-label {
-    font-size: $text-base;
-    font-weight: 700;
-    color: $color-secondary;
-  }
-
-  &__step-desc {
-    font-size: $text-sm;
-    color: $text-muted;
-  }
-
-  &__step-arrow {
-    font-size: $text-2xl;
-    color: $color-accent;
-    font-weight: 300;
-    display: none;
-
-    @include md { display: block; }
+    @include lg {
+      max-width: none;
+      height: 100%;
+      position: absolute;
+      bottom: 0;
+    }
   }
 }
 </style>

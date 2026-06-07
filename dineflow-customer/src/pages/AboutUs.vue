@@ -3,69 +3,7 @@
 </script>
 
 <template>
-  <div class="about-page">
-
-    <!-- Hero Banner -->
-    <section class="about-page__hero">
-      <div class="container">
-        <span class="about-page__label">Our Story</span>
-        <h1 class="about-page__title">Dining reimagined,<br />one table at a time.</h1>
-        <p class="about-page__desc">
-          DineFlow was built to remove friction from the restaurant experience.
-          No flagging down waiters, no printing menus — just seamless digital ordering from your seat.
-        </p>
-      </div>
-    </section>
-
-    <!-- Stats Section -->
-    <section class="section about-page__stats-section">
-      <div class="container">
-        <div class="about-page__stats">
-          <div class="about-page__stat">
-            <span class="about-page__stat-num">500+</span>
-            <span class="about-page__stat-label">Orders Served</span>
-          </div>
-          <div class="about-page__stat">
-            <span class="about-page__stat-num">98%</span>
-            <span class="about-page__stat-label">Customer Satisfaction</span>
-          </div>
-          <div class="about-page__stat">
-            <span class="about-page__stat-num">3 min</span>
-            <span class="about-page__stat-label">Avg Order to Kitchen</span>
-          </div>
-          <div class="about-page__stat">
-            <span class="about-page__stat-num">1</span>
-            <span class="about-page__stat-label">Restaurant (growing!)</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Values Section -->
-    <section class="section about-page__values-section">
-      <div class="container">
-        <h2 class="about-page__section-title">What we stand for</h2>
-        <div class="about-page__values">
-          <div class="about-page__value">
-            <span class="about-page__value-icon">⚡</span>
-            <h3 class="about-page__value-name">Speed</h3>
-            <p class="about-page__value-desc">Your order goes to the kitchen the moment you tap confirm. No delays.</p>
-          </div>
-          <div class="about-page__value">
-            <span class="about-page__value-icon">🌿</span>
-            <h3 class="about-page__value-name">Freshness</h3>
-            <p class="about-page__value-desc">Every item on our menu is freshly prepared from quality ingredients.</p>
-          </div>
-          <div class="about-page__value">
-            <span class="about-page__value-icon">💡</span>
-            <h3 class="about-page__value-name">Simplicity</h3>
-            <p class="about-page__value-desc">Ordering should be as easy as browsing your phone.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </div>
+  
 </template>
 
 <style lang="scss" scoped>
