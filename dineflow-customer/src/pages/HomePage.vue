@@ -576,6 +576,7 @@ const router = useRouter()
     width: 100%;
     height: auto;
     object-fit: contain;
+    animation: float-phone 2s ease-in-out infinite;
 
     @include lg {
       max-width: none;
@@ -583,6 +584,15 @@ const router = useRouter()
       position: absolute;
       bottom: 0;
     }
+  }
+}
+
+@keyframes float-phone {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
   }
 }
 </style>
