@@ -6,6 +6,7 @@ import {
   DashboardOutlined,
   ShoppingOutlined,
   AppstoreOutlined,
+  TagOutlined,
   LogoutOutlined,
   MenuOutlined,
   BellOutlined,
@@ -48,6 +49,7 @@ const pageTitle = computed(() => {
     case '/': return 'Dashboard'
     case '/orders': return 'Orders Manager'
     case '/menu-crud': return 'Menu Management'
+    case '/coupons': return 'Coupon Manager'
     default: return 'Overview'
   }
 })
@@ -106,6 +108,13 @@ const pageTitle = computed(() => {
               <div class="flex items-center justify-between w-full pr-1">
                 <span class="font-semibold text-sm">Menu Manager</span>
                 <RightOutlined v-if="selectedKeys.includes('/menu-crud') && !collapsed" class="text-[10px] text-orange-500 shrink-0 font-bold animate-fade-in" />
+              </div>
+            </a-menu-item>
+            <a-menu-item key="/coupons" @click="navigateTo('/coupons')" class="rounded-xl my-1 group">
+              <template #icon><TagOutlined /></template>
+              <div class="flex items-center justify-between w-full pr-1">
+                <span class="font-semibold text-sm">Coupons</span>
+                <RightOutlined v-if="selectedKeys.includes('/coupons') && !collapsed" class="text-[10px] text-orange-500 shrink-0 font-bold animate-fade-in" />
               </div>
             </a-menu-item>
           </a-menu>
@@ -171,6 +180,13 @@ const pageTitle = computed(() => {
           <div class="flex items-center justify-between w-full">
             <span class="font-semibold text-sm">Menu Manager</span>
             <RightOutlined v-if="selectedKeys.includes('/menu-crud')" class="text-[10px] text-orange-500" />
+          </div>
+        </a-menu-item>
+        <a-menu-item key="/coupons" @click="navigateTo('/coupons')" class="rounded-xl my-1">
+          <template #icon><TagOutlined /></template>
+          <div class="flex items-center justify-between w-full">
+            <span class="font-semibold text-sm">Coupons</span>
+            <RightOutlined v-if="selectedKeys.includes('/coupons')" class="text-[10px] text-orange-500" />
           </div>
         </a-menu-item>
       </a-menu>

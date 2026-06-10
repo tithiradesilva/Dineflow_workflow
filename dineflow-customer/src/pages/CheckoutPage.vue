@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { useCartStore } from '@/stores/cartStore'
 import { useAuthStore } from '@/stores/authStore'
 import { orderService } from '@/services/orderService'
+import { couponService } from '@/services/couponService'
 
 const router = useRouter()
 const cart   = useCartStore()
@@ -29,7 +30,7 @@ const couponDiscount = ref(0)
 const couponError = ref('')
 const couponSuccess = ref('')
 
-function claimCoupon() {
+async function claimCoupon() {
   couponError.value = ''
   couponSuccess.value = ''
   if (!couponCode.value.trim()) {
@@ -37,13 +38,17 @@ function claimCoupon() {
     return
   }
   const code = couponCode.value.trim().toUpperCase()
-  if (code === 'DINEFLOW' || code === 'WELCOME10') {
-    appliedCoupon.value = code
-    // 10% off subtotal
-    couponDiscount.value = cart.totalPrice * 0.1
-    couponSuccess.value = `Coupon "${code}" applied successfully! 10% discount applied.`
-  } else {
-    couponError.value = 'Invalid coupon code. Try DINEFLOW or WELCOME10.'
+  try {
+    const result = await couponService.validateCoupon(code)
+    if (result.valid) {
+      appliedCoupon.value = code
+      couponDiscount.value = cart.totalPrice * (result.discount_percent / 100)
+      couponSuccess.value = `Coupon "${code}" applied! ${result.discount_percent}% discount applied.`
+    } else {
+      couponError.value = 'Invalid or expired coupon code.'
+    }
+  } catch (e: any) {
+    couponError.value = 'Failed to validate coupon. Please try again.'
   }
 }
 
@@ -173,6 +178,11 @@ async function placeOrder() {
     const order = await orderService.placeOrder({
       table_name: tableName.value.trim(),
       total: grand.value,
+      payment_method: paymentMethod.value,
+      subtotal: cart.totalPrice,
+      tax: tax.value,
+      discount: couponDiscount.value,
+      coupon_code: appliedCoupon.value || null,
       items: cart.items.map(item => ({
         menu_item_id: item.id,
         quantity: item.cartQty,

@@ -12,6 +12,11 @@ export interface PlaceOrderPayload {
   table_name: string     // e.g. "Table 3"
   items: CartItemPayload[]
   total: number
+  payment_method: 'card' | 'cash'
+  subtotal: number
+  tax: number
+  discount: number
+  coupon_code: string | null
 }
 
 export interface Order {
@@ -34,7 +39,12 @@ export const orderService = {
       .insert([{
         table_name: payload.table_name,
         total: payload.total,
-        status: 'Preparing'             // new orders start as Preparing
+        status: 'Preparing',
+        payment_method: payload.payment_method,
+        subtotal: payload.subtotal,
+        tax: payload.tax,
+        discount: payload.discount,
+        coupon_code: payload.coupon_code
       }])
       .select()
       .single()

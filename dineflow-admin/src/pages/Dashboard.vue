@@ -59,6 +59,7 @@
             :data-source="filteredOrders" 
             :pagination="false"
             :loading="isLoading"
+            size="middle"
             class="font-sans"
           >
             <template #bodyCell="{ column, record }">
@@ -74,8 +75,30 @@
                 </span>
               </template>
 
+              <!-- Items Column -->
+              <template v-else-if="column.dataIndex === 'items'">
+                <div class="flex flex-wrap gap-1 py-1 max-w-xs">
+                  <template v-if="record.items && record.items !== 'No items'">
+                    <span 
+                      v-for="(item, idx) in record.items.split(', ').slice(0, 2)" 
+                      :key="idx"
+                      class="inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-medium bg-slate-50 text-slate-700 border border-slate-200/60"
+                    >
+                      {{ item }}
+                    </span>
+                    <span 
+                      v-if="record.items.split(', ').length > 2"
+                      class="inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-semibold bg-orange-50 text-orange-700 border border-orange-200/50"
+                    >
+                      +{{ record.items.split(', ').length - 2 }} items
+                    </span>
+                  </template>
+                  <span v-else class="text-slate-400 text-xs italic">No items</span>
+                </div>
+              </template>
+
               <!-- Status badge -->
-              <template v-if="column.dataIndex === 'status'">
+              <template v-else-if="column.dataIndex === 'status'">
                 <span 
                   class="px-3 py-1 rounded-full text-xs font-bold"
                   :class="{
@@ -95,21 +118,22 @@
 
               <!-- Actions Column -->
               <template v-else-if="column.key === 'action'">
-                <div class="flex items-center space-x-2">
+                <div class="flex items-center gap-3">
                   <a-button 
                     v-if="record.status === 'Preparing'"
                     size="small"
                     type="primary"
-                    class="bg-primary hover:bg-primary-dark border-none rounded-lg text-xs font-bold h-7"
+                    class="bg-primary hover:bg-primary-dark border-none rounded-lg text-xs font-bold h-7 flex items-center justify-center gap-1"
                     @click="advanceStatus(record.key, 'Ready')"
                   >
-                    🍳 Mark Ready
+                    <CheckOutlined />
+                    <span>Ready</span>
                   </a-button>
                   <a-button 
                     v-else-if="record.status === 'Ready'"
                     size="small"
                     type="primary"
-                    class="bg-emerald-500 hover:bg-emerald-600 border-none rounded-lg text-xs font-bold h-7"
+                    class="bg-emerald-500 hover:bg-emerald-600 border-none rounded-lg text-xs font-bold h-7 flex items-center justify-center gap-1"
                     @click="advanceStatus(record.key, 'Delivered')"
                   >
                     🚀 Deliver
@@ -191,7 +215,8 @@ import {
   DollarOutlined, 
   ShoppingOutlined, 
   UserOutlined, 
-  FireOutlined 
+  FireOutlined,
+  CheckOutlined
 } from '@ant-design/icons-vue'
 import { orderService } from '../services/orderService'
 
@@ -323,10 +348,15 @@ onUnmounted(() => {
 
 <style scoped>
 /* Ensure Ant Design table headers match our clean aesthetic */
-:deep(.ant-table-thead > tr > th) {
+:deep(.ant-table-thead .ant-table-cell) {
   background-color: #f8fafc; /* slate-50 */
   color: #64748b; /* slate-500 */
   font-weight: 600;
   border-bottom: 1px solid #f1f5f9;
+  padding: 10px 12px !important;
+}
+
+:deep(.ant-table-tbody .ant-table-cell) {
+  padding: 6px 12px !important;
 }
 </style>

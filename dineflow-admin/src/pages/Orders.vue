@@ -67,6 +67,7 @@
           pageSizeOptions: ['5', '10', '20'],
           showTotal: (total: number) => `Total ${total} orders`
         }"
+        size="middle"
         class="font-sans"
       >
         <template #bodyCell="{ column, record }">
@@ -88,6 +89,28 @@
             <span class="text-slate-500 font-medium">{{ formatDate(record.created_at) }}</span>
           </template>
 
+          <!-- Items Summary Column -->
+          <template v-else-if="column.dataIndex === 'items'">
+            <div class="flex flex-wrap gap-1 py-1 max-w-xs">
+              <template v-if="record.items && record.items !== 'No items'">
+                <span 
+                  v-for="(item, idx) in record.items.split(', ').slice(0, 2)" 
+                  :key="idx"
+                  class="inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-medium bg-slate-50 text-slate-700 border border-slate-200/60"
+                >
+                  {{ item }}
+                </span>
+                <span 
+                  v-if="record.items.split(', ').length > 2"
+                  class="inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-semibold bg-orange-50 text-orange-700 border border-orange-200/50"
+                >
+                  +{{ record.items.split(', ').length - 2 }} items
+                </span>
+              </template>
+              <span v-else class="text-slate-400 text-xs italic">No items</span>
+            </div>
+          </template>
+
           <!-- Status badge -->
           <template v-else-if="column.dataIndex === 'status'">
             <span 
@@ -107,9 +130,21 @@
             <span class="font-bold text-slate-700">${{ record.total.toFixed(2) }}</span>
           </template>
 
+          <!-- Payment Method -->
+          <template v-else-if="column.dataIndex === 'payment_method'">
+            <span 
+              class="px-2.5 py-1 rounded-full text-xs font-bold border"
+              :class="record.payment_method === 'cash' 
+                ? 'bg-emerald-50 text-emerald-700 border-emerald-100' 
+                : 'bg-violet-50 text-violet-700 border-violet-100'"
+            >
+              {{ record.payment_method === 'cash' ? '💵 Cash' : '💳 Card' }}
+            </span>
+          </template>
+
           <!-- Actions Column -->
           <template v-else-if="column.key === 'actions'">
-            <div class="flex items-center space-x-3">
+            <div class="flex items-center gap-3">
               <!-- View details -->
               <a-button 
                 size="small"
@@ -125,16 +160,17 @@
                 v-if="record.status === 'Preparing'"
                 size="small"
                 type="primary"
-                class="bg-primary hover:bg-primary-dark border-none rounded-lg text-xs font-bold h-8 px-3 text-white"
+                class="bg-primary hover:bg-primary-dark border-none rounded-lg text-xs font-bold h-8 px-3 text-white flex items-center justify-center gap-1"
                 @click="advanceStatus(record.key, 'Ready')"
               >
-                🍳 Mark Ready
+                <CheckOutlined />
+                <span>Ready</span>
               </a-button>
               <a-button 
                 v-else-if="record.status === 'Ready'"
                 size="small"
                 type="primary"
-                class="bg-emerald-500 hover:bg-emerald-600 border-none rounded-lg text-xs font-bold h-8 px-3 text-white"
+                class="bg-emerald-500 hover:bg-emerald-600 border-none rounded-lg text-xs font-bold h-8 px-3 text-white flex items-center justify-center gap-1"
                 @click="advanceStatus(record.key, 'Delivered')"
               >
                 🚀 Deliver
@@ -207,9 +243,39 @@
         </div>
 
         <!-- Grand Total block -->
-        <div class="flex items-center justify-between pt-4 border-t border-slate-100">
-          <span class="text-base font-bold text-slate-600">Grand Total</span>
-          <span class="text-2xl font-extrabold text-primary">${{ selectedOrder.total.toFixed(2) }}</span>
+        <div class="space-y-2 pt-4 border-t border-slate-100">
+          <div v-if="selectedOrder.subtotal > 0" class="flex items-center justify-between text-sm">
+            <span class="text-slate-500 font-medium">Subtotal</span>
+            <span class="font-semibold text-slate-600">${{ selectedOrder.subtotal.toFixed(2) }}</span>
+          </div>
+          <div v-if="selectedOrder.tax > 0" class="flex items-center justify-between text-sm">
+            <span class="text-slate-500 font-medium">Tax (5%)</span>
+            <span class="font-semibold text-slate-600">${{ selectedOrder.tax.toFixed(2) }}</span>
+          </div>
+          <div v-if="selectedOrder.discount > 0" class="flex items-center justify-between text-sm">
+            <span class="text-slate-500 font-medium">
+              Discount
+              <span v-if="selectedOrder.coupon_code" class="text-xs text-primary font-bold ml-1">({{ selectedOrder.coupon_code }})</span>
+            </span>
+            <span class="font-semibold text-emerald-600">-${{ selectedOrder.discount.toFixed(2) }}</span>
+          </div>
+          <div class="flex items-center justify-between pt-2">
+            <span class="text-base font-bold text-slate-600">Grand Total</span>
+            <span class="text-2xl font-extrabold text-primary">${{ selectedOrder.total.toFixed(2) }}</span>
+          </div>
+        </div>
+
+        <!-- Payment Method Badge -->
+        <div class="flex items-center justify-between pt-3 border-t border-slate-100">
+          <span class="text-sm font-bold text-slate-500">Payment Method</span>
+          <span 
+            class="px-3 py-1 rounded-full text-xs font-bold border"
+            :class="selectedOrder.payment_method === 'cash' 
+              ? 'bg-emerald-50 text-emerald-700 border-emerald-100' 
+              : 'bg-violet-50 text-violet-700 border-violet-100'"
+          >
+            {{ selectedOrder.payment_method === 'cash' ? '💵 Cash at Counter' : '💳 Credit / Debit Card' }}
+          </span>
         </div>
       </div>
     </a-modal>
@@ -224,7 +290,8 @@ import {
   ShoppingOutlined,
   DollarOutlined,
   CheckCircleOutlined,
-  HourglassOutlined
+  HourglassOutlined,
+  CheckOutlined
 } from '@ant-design/icons-vue'
 import { orderService } from '../services/orderService'
 
@@ -240,11 +307,12 @@ const selectedOrderItems = ref<any[]>([])
 const isDetailsLoading = ref(false)
 
 const columns = [
-  { title: 'Order ID', dataIndex: 'id', key: 'id', width: '12%' },
-  { title: 'Table', dataIndex: 'table', key: 'table', width: '15%' },
-  { title: 'Date & Time', dataIndex: 'created_at', key: 'created_at', width: '20%' },
-  { title: 'Items Summary', dataIndex: 'items', key: 'items', width: '28%' },
-  { title: 'Total', dataIndex: 'total', key: 'total', width: '12%' },
+  { title: 'Order ID', dataIndex: 'id', key: 'id', width: '10%' },
+  { title: 'Table', dataIndex: 'table', key: 'table', width: '12%' },
+  { title: 'Date & Time', dataIndex: 'created_at', key: 'created_at', width: '16%' },
+  { title: 'Items Summary', dataIndex: 'items', key: 'items', width: '22%' },
+  { title: 'Payment', dataIndex: 'payment_method', key: 'payment_method', width: '10%' },
+  { title: 'Total', dataIndex: 'total', key: 'total', width: '10%' },
   { title: 'Status', dataIndex: 'status', key: 'status', width: '10%' },
   { title: 'Actions', key: 'actions', align: 'right' as const }
 ]
@@ -342,11 +410,16 @@ onMounted(() => {
 </script>
 
 <style scoped>
-:deep(.ant-table-thead > tr > th) {
+:deep(.ant-table-thead .ant-table-cell) {
   background-color: #f8fafc;
   color: #64748b;
   font-weight: 600;
   border-bottom: 1px solid #f1f5f9;
+  padding: 10px 12px !important;
+}
+
+:deep(.ant-table-tbody .ant-table-cell) {
+  padding: 6px 12px !important;
 }
 
 .animate-fade-in {

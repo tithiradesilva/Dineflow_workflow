@@ -8,6 +8,11 @@ export interface Order {
   total: number
   status: 'Preparing' | 'Ready' | 'Delivered'
   created_at: string
+  payment_method: string
+  subtotal: number
+  tax: number
+  discount: number
+  coupon_code: string | null
 }
 
 export const orderService = {
@@ -31,7 +36,12 @@ export const orderService = {
         items: itemsDescription || 'No items',
         total: Number(order.total),
         status: order.status as 'Preparing' | 'Ready' | 'Delivered',
-        created_at: order.created_at
+        created_at: order.created_at,
+        payment_method: order.payment_method || 'card',
+        subtotal: Number(order.subtotal || 0),
+        tax: Number(order.tax || 0),
+        discount: Number(order.discount || 0),
+        coupon_code: order.coupon_code || null
       }
     })
   },
