@@ -16,22 +16,7 @@ const router = useRouter()
             <span class="hero__title--accent">Favorite</span> Food.
           </h1>
           <div class="hero__search">
-            <div class="hero__search-wrap">
-              <input
-                id="address-input"
-                class="hero__search-input"
-                type="text"
-                placeholder="Enter your Address"
-              />
-              <span class="hero__search-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 2C7.58 2 4 5.58 4 10c0 5.25 8 12 8 12s8-6.75 8-12c0-4.42-3.58-8-8-8z" fill="#ee5a13"/>
-                  <circle cx="12" cy="10" r="3.5" fill="#ffffff"/>
-                  <circle cx="12" cy="10" r="1.5" fill="#ee5a13"/>
-                </svg>
-              </span>
-            </div>
-            <button class="hero__order-btn" @click="router.push('/products')">Order</button>
+            <button class="hero__order-btn" @click="router.push('/products')">Order Now</button>
           </div>
         </div>
 
@@ -240,75 +225,38 @@ const router = useRouter()
     }
   }
 
-  // Address Search Row
+  // Hero CTA Search Row
   &__search {
     display: flex;
     align-items: center;
-    gap: 15px;
     width: 100%;
-    margin-top: 10px;
-  }
-
-  &__search-wrap {
-    position: relative;
-    flex: 0 0 380px;
-    max-width: 100%;
-  }
-
-  &__search-input {
-    width: 100%;
-    height: 50px;
-    padding: 0 46px 0 20px;
-    border-radius: 9999px;
-    border: none;
-    outline: none;
-    font-size: 15px;
-    background: #ffffff;
-    color: #1f2937;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-    transition: all 0.2s ease;
-
-    &::placeholder {
-      color: #a8a8a8;
-      font-weight: 500;
-    }
-  }
-
-  &__search-icon {
-    position: absolute;
-    right: 18px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
+    margin-top: 15px;
   }
 
   &__order-btn {
-    width: 120px;
-    height: 50px;
+    width: 180px;
+    height: 54px;
     background: #ee5a13;
     color: #ffffff;
     border: none;
     border-radius: 9999px;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 700;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(238, 90, 19, 0.25);
-    transition: all 0.2s ease;
+    box-shadow: 0 6px 20px rgba(238, 90, 19, 0.3);
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
     display: flex;
     align-items: center;
     justify-content: center;
 
     &:hover {
       background: #d4490b;
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(238, 90, 19, 0.45);
     }
     &:active {
       transform: translateY(0);
+      box-shadow: 0 4px 12px rgba(238, 90, 19, 0.25);
     }
   }
 

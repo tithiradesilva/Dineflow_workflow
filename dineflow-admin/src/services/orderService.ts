@@ -89,10 +89,10 @@ export const orderService = {
     const uniqueTables = new Set((ordersData || []).map((o: any) => o.table_name)).size
 
     // Calculate actual average prep time for completed orders (Ready or Delivered)
-    const completedOrders = (ordersData || []).filter((o: any) => 
+    const completedOrders = (ordersData || []).filter((o: any) =>
       (o.status === 'Ready' || o.status === 'Delivered') && o.updated_at && o.created_at
     )
-    
+
     let avgPrepTimeMinutes = 0
     if (completedOrders.length > 0) {
       const totalDiffMs = completedOrders.reduce((sum: number, o: any) => {

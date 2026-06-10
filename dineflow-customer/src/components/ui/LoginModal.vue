@@ -11,7 +11,7 @@ const step = ref<'phone' | 'otp'>('phone')
 const isLoading = ref(false)
 const errorMessage = ref('')
 
-// Compute full phone number for authentication
+// Compute full phone number for verification message
 const phone = computed(() => {
   return `+94 ${phoneDigits.value}`
 })
@@ -81,7 +81,6 @@ async function verifyOtp() {
     return
   }
   
-  // For testing convenience, we verify if the OTP code matches 123456
   errorMessage.value = ''
   isLoading.value = true
 
@@ -90,7 +89,9 @@ async function verifyOtp() {
     await new Promise((resolve) => setTimeout(resolve, 800))
 
     if (otp.value.trim() === '123456') {
-      auth.login(phone.value)
+      // Save exactly the 9 digits (no "+94")
+      const cleanPhone = phoneDigits.value.replace(/\D/g, '')
+      auth.login(cleanPhone)
       closeModal()
     } else {
       errorMessage.value = 'Invalid OTP code. Please enter 123456.'
@@ -142,7 +143,7 @@ function handleSignOut() {
         <p class="login-modal-card__subtitle">You are currently logged in to Dineflow.</p>
         
         <div class="login-modal-card__profile-phone">
-          {{ auth.phoneNumber }}
+          +94 {{ auth.phoneNumber }}
         </div>
 
         <button class="login-modal-card__btn-logout" @click="handleSignOut">
