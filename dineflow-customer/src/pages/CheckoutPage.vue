@@ -189,8 +189,7 @@ async function placeOrder() {
       <div v-if="successOrderId" class="checkout-page__success anim-slide-up">
         <span class="checkout-page__success-icon">🎉</span>
         <h1>Order Placed!</h1>
-        <p>Order <strong>#ORD-{{ String(successOrderId).padStart(3, '0') }}</strong> has been sent to the kitchen.</p>
-        <p class="checkout-page__success-note">You'll be notified when your food is ready. Sit back and relax!</p>
+        <p>Order <strong>#ORD-{{ String(successOrderId).padStart(3, '0') }}</strong> has been sent to the kitchen. You'll be notified when your food is ready. Sit back and relax!</p>
         <button class="checkout-page__back-btn" @click="router.push('/')">
           Back to Home
         </button>
@@ -458,21 +457,26 @@ async function placeOrder() {
     @include card($radius-xl, $shadow-lg);
     padding: $space-12 $space-8;
 
-    h1 { font-size: $text-3xl; }
-    p  { color: $text-muted; }
+    h1 { font-size: $text-3xl; font-weight: 750; color: #202020;}
+    p {
+      font-size: 14px;
+      color: rgb(109, 109, 109);
+      font-weight: 650;
+      line-height: 30px;
+
+      strong {
+        color: #f97316;
+        text-decoration: underline;
+      }
+    }
   }
 
-  &__success-icon { font-size: 4rem; line-height: 1; }
-
-  &__success-note {
-    font-size: $text-sm;
-    color: $text-light;
-  }
+  &__success-icon { font-size: 34px; line-height: 1; }
 
   &__back-btn {
     @include btn-primary;
     background: #f97316;
-    padding: $space-3 $space-8;
+    padding: $space-4 $space-8;
     font-size: $text-base;
     border-radius: $radius-lg;
     margin-top: $space-2;
