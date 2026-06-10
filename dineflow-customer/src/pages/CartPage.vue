@@ -139,6 +139,7 @@ const grand = computed(() => cart.totalPrice + tax.value)
     margin-top: 20px;
     transition: $transition-fast;
     margin-bottom: 20px;
+    font-weight: 700;
 
     &:hover {
       color: color.adjust(#f97316, $lightness: -8%);
