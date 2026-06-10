@@ -1,11 +1,20 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCartStore } from '@/stores/cartStore'
+import { useAuthStore } from '@/stores/authStore'
 import { orderService } from '@/services/orderService'
 
 const router = useRouter()
 const cart   = useCartStore()
+const auth   = useAuthStore()
+
+onMounted(() => {
+  if (!auth.isLoggedIn && !auth.hasSkippedPhone) {
+    auth.isCheckoutTrigger = true
+    auth.showLoginModal = true
+  }
+})
 
 // Customer Details
 const tableName  = ref('')
@@ -173,6 +182,7 @@ async function placeOrder() {
 
     successOrderId.value = order.id
     cart.clearCart()
+    auth.hasSkippedPhone = false
   } catch (e: any) {
     error.value = 'Failed to place order. Please try again.'
   } finally {

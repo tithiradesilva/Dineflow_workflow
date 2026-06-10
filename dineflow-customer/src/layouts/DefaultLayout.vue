@@ -3,6 +3,7 @@
 // Every page automatically gets the navbar at the top and footer at the bottom.
 import TheNavbar from '@/components/navbar/TheNavbar.vue'
 import TheFooter from '@/components/footer/TheFooter.vue'
+import LoginModal from '@/components/ui/LoginModal.vue'
 </script>
 
 <template>
@@ -15,6 +16,9 @@ import TheFooter from '@/components/footer/TheFooter.vue'
     </main>
 
     <TheFooter />
+
+    <!-- Global login / profile account modal -->
+    <LoginModal />
   </div>
 </template>
 

@@ -2,10 +2,82 @@
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useCartStore } from '@/stores/cartStore'
+import { useAuthStore } from '@/stores/authStore'
 
 const router = useRouter()
 const route  = useRoute()
 const cart   = useCartStore()
+const auth   = useAuthStore()
+
+const currentLangLabel = ref('En')
+const showLangDropdown = ref(false)
+
+function getCookie(name: string): string {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop()?.split(';').shift() || ''
+  return ''
+}
+
+function initGoogleTranslate() {
+  if (document.getElementById('google-translate-script')) return
+
+  let translateElement = document.getElementById('google_translate_element')
+  if (!translateElement) {
+    translateElement = document.createElement('div')
+    translateElement.id = 'google_translate_element'
+    document.body.appendChild(translateElement)
+  }
+
+  // Define callback BEFORE appending script to prevent race conditions
+  ;(window as any).googleTranslateElementInit = () => {
+    new (window as any).google.translate.TranslateElement({
+      pageLanguage: 'en',
+      includedLanguages: 'en,de,si',
+      layout: (window as any).google.translate.TranslateElement.InlineLayout.SIMPLE,
+      autoDisplay: false
+    }, 'google_translate_element')
+  }
+
+  const script = document.createElement('script')
+  script.id = 'google-translate-script'
+  script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'
+  document.body.appendChild(script)
+}
+
+function changeLanguage(langCode: 'en' | 'de' | 'si') {
+  // Persist translation language selection via standard googtrans cookie
+  const domain = window.location.hostname
+  document.cookie = `googtrans=/en/${langCode}; path=/;`
+  document.cookie = `googtrans=/en/${langCode}; path=/; domain=.${domain};`
+  document.cookie = `googtrans=/en/${langCode}; path=/; domain=${domain};`
+
+  const selectEl = document.querySelector('.goog-te-combo') as HTMLSelectElement
+  if (selectEl) {
+    selectEl.value = langCode
+    selectEl.dispatchEvent(new Event('change', { bubbles: true }))
+    selectEl.dispatchEvent(new Event('click', { bubbles: true }))
+  } else {
+    // If widget not fully loaded, cookie is set, reload will invoke translation instantly
+    window.location.reload()
+    return
+  }
+
+  if (langCode === 'en') currentLangLabel.value = 'En'
+  else if (langCode === 'de') currentLangLabel.value = 'De'
+  else if (langCode === 'si') currentLangLabel.value = 'Si'
+
+  showLangDropdown.value = false
+}
+
+function closeLangDropdown() {
+  showLangDropdown.value = false
+}
+
+function handleProfileClick() {
+  auth.isCheckoutTrigger = false
+  auth.showLoginModal = true
+}
 
 // Mobile menu open/close toggle
 const mobileOpen = ref(false)
@@ -52,11 +124,21 @@ watch(
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll, { passive: true })
+  window.addEventListener('click', closeLangDropdown)
   handleScroll()
+
+  // Read googtrans cookie to display correct navbar language label on load
+  const transCookie = getCookie('googtrans')
+  if (transCookie.endsWith('/de')) currentLangLabel.value = 'De'
+  else if (transCookie.endsWith('/si')) currentLangLabel.value = 'Si'
+  else currentLangLabel.value = 'En'
+
+  initGoogleTranslate()
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
+  window.removeEventListener('click', closeLangDropdown)
 })
 </script>
 
@@ -85,11 +167,42 @@ onUnmounted(() => {
       <!-- Right Actions (Language, Cart, Profile, Hamburger) -->
       <div class="navbar__actions">
         <!-- Language Switcher -->
-        <div class="navbar__language">
-          <span>En</span>
+        <div
+          class="navbar__language"
+          @click.stop="showLangDropdown = !showLangDropdown"
+        >
+          <span>{{ currentLangLabel }}</span>
           <svg class="navbar__language-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
+
+          <!-- Dropdown Options -->
+          <div v-show="showLangDropdown" class="navbar__language-dropdown">
+            <button
+              type="button"
+              class="lang-option"
+              :class="{ 'lang-option--active': currentLangLabel === 'En' }"
+              @click.stop="changeLanguage('en')"
+            >
+              English
+            </button>
+            <button
+              type="button"
+              class="lang-option"
+              :class="{ 'lang-option--active': currentLangLabel === 'De' }"
+              @click.stop="changeLanguage('de')"
+            >
+              Deutsch
+            </button>
+            <button
+              type="button"
+              class="lang-option"
+              :class="{ 'lang-option--active': currentLangLabel === 'Si' }"
+              @click.stop="changeLanguage('si')"
+            >
+              සිංහල (Sinhala)
+            </button>
+          </div>
         </div>
 
         <!-- Cart Action Icon -->
@@ -105,7 +218,11 @@ onUnmounted(() => {
         </button>
 
         <!-- Account Profile Action Icon -->
-        <button class="navbar__action-btn navbar__profile" @click="navigate('/')" aria-label="User Account">
+        <button
+          class="navbar__action-btn navbar__profile"
+          @click="handleProfileClick"
+          aria-label="User Account"
+        >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="action-svg">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
             <circle cx="12" cy="7" r="4"></circle>
@@ -274,6 +391,7 @@ onUnmounted(() => {
 
   // Language switcher
   &__language {
+    position: relative;
     display: flex;
     align-items: center;
     gap: $space-1;
@@ -294,6 +412,39 @@ onUnmounted(() => {
       width: 12px;
       height: 12px;
       color: #666666;
+    }
+
+    &-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 8px;
+      background: #ffffff;
+      border: 1px solid $color-border;
+      border-radius: $radius-md;
+      box-shadow: $shadow-md;
+      display: flex;
+      flex-direction: column;
+      min-width: 120px;
+      overflow: hidden;
+      z-index: 101;
+      padding: 4px 0;
+
+      .lang-option {
+        @include btn-reset;
+        width: 100%;
+        text-align: left;
+        padding: 10px 16px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #333333;
+        transition: background 0.15s ease;
+
+        &:hover, &--active {
+          background: rgba(#f97316, 0.08);
+          color: #f97316;
+        }
+      }
     }
   }
 
@@ -395,5 +546,19 @@ onUnmounted(() => {
       background: rgba(0, 0, 0, 0.03);
     }
   }
+}
+</style>
+
+<style lang="scss">
+/* Hide standard Google Translate widget elements */
+#google_translate_element,
+.skiptranslate,
+iframe.skiptranslate,
+.goog-te-banner-frame {
+  display: none !important;
+  visibility: hidden !important;
+}
+body {
+  top: 0px !important;
 }
 </style>
