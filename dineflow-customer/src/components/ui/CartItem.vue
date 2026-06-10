@@ -74,15 +74,20 @@ const subtotal = () => (props.item.price * props.item.cartQty).toFixed(2)
   }
 
   &__name {
-    font-weight: 700;
-    font-size: $text-base;
+    font-weight: 800;
+    font-size: 17px;
     color: $color-secondary;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    color: rgb(29, 29, 29);
   }
 
-  &__unit-price { font-size: $text-sm; color: $text-light; }
+  &__unit-price {
+    font-size: 14px;
+    color: #7b7b7b;
+    font-weight: 700;
+  }
 
   &__controls { @include flex-row($space-2); flex-shrink: 0; }
 
@@ -117,13 +122,14 @@ const subtotal = () => (props.item.price * props.item.cartQty).toFixed(2)
     @include flex-col($space-2);
     align-items: flex-end;
     flex-shrink: 0;
+    margin-left: 30px;
   }
 
   &__subtotal {
     font-family: $font-heading;
     font-weight: 800;
-    font-size: $text-lg;
-    color: $color-primary;
+    font-size: 18px;
+    color: #f97316;
   }
 
   &__remove {

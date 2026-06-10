@@ -21,17 +21,19 @@ const grand = computed(() => cart.totalPrice + tax.value)
 
       <!-- Page Title -->
       <div class="cart-page__header">
+        <p class="cart-page__sub">
+          {{ cart.totalItems }} {{ cart.totalItems === 1 ? 'item' : 'items' }}
+        </p>
         <h1 class="cart-page__title">Your Cart</h1>
-        <p class="cart-page__sub">Review your items before checking out.</p>
       </div>
 
       <!-- Empty Cart State -->
       <div v-if="isEmpty" class="cart-page__empty">
-        <span class="cart-page__empty-icon">🛒</span>
+        <img src="@/assets/EmptyItemsIcon.png" alt="Empty Cart" class="cart-page__empty-icon" />
         <h2>Your cart is empty</h2>
-        <p>Add some delicious items from our menu.</p>
+        <p>Add some items from our menu.</p>
         <button class="cart-page__browse-btn" @click="router.push('/products')">
-          Browse Menu →
+          Browse Menu
         </button>
       </div>
 
@@ -70,14 +72,14 @@ const grand = computed(() => cart.totalPrice + tax.value)
             class="cart-page__checkout-btn"
             @click="router.push('/checkout')"
           >
-            Proceed to Checkout →
+            Proceed to Checkout
           </button>
 
           <button
             class="cart-page__continue-btn"
             @click="router.push('/products')"
           >
-            ← Continue Shopping
+            Continue Shopping
           </button>
         </aside>
 
@@ -87,38 +89,61 @@ const grand = computed(() => cart.totalPrice + tax.value)
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 .cart-page {
   padding: $space-10 0 $space-16;
 
   &__header {
-    margin-bottom: $space-8;
+    text-align: center;
+    margin-bottom: $space-10;
   }
 
-  &__title { margin-bottom: $space-1; }
-  &__sub   { color: $text-muted; }
+  &__title {
+    font-family: $font-heading;
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: #1f2937;
+    margin-bottom: $space-2;
+  }
+
+  &__sub {
+    font-family: $font-body;
+    font-size: 18px;
+    color: #f97316;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+  }
 
   // Empty state
   &__empty {
     @include flex-col($space-4);
     align-items: center;
     text-align: center;
-    padding: $space-16 0;
+    padding: 10px 0;
 
-    h2 { font-size: $text-2xl; }
-    p  { color: $text-muted; }
+    h2 { font-size: 22px; color: rgb(34, 34, 34); font-weight: 700;}
+    p  { color: grey; font-weight: 600;}
   }
 
   &__empty-icon {
-    font-size: 4rem;
-    line-height: 1;
+    width: 180px;
+    height: auto;
+    opacity: 0.35;
   }
 
   &__browse-btn {
-    @include btn-primary;
-    padding: $space-3 $space-8;
+    @include btn-reset;
     font-size: $text-base;
-    border-radius: $radius-lg;
-    margin-top: $space-4;
+    color: #f97316;
+    margin-top: 20px;
+    transition: $transition-fast;
+    margin-bottom: 20px;
+
+    &:hover {
+      color: color.adjust(#f97316, $lightness: -8%);
+      text-decoration: underline;
+    }
   }
 
   // Two-column layout: items list + summary panel
@@ -150,42 +175,52 @@ const grand = computed(() => cart.totalPrice + tax.value)
   }
 
   &__summary-title {
-    font-size: $text-xl;
+    font-size: 16px;
     margin-bottom: $space-6;
     padding-bottom: $space-4;
     border-bottom: 1px solid $color-border;
+    font-weight: 700;
+    color: black;
   }
 
   &__summary-rows {
     @include flex-col($space-3);
     margin-bottom: $space-6;
+    color: rgb(48, 48, 48);
+    font-weight: 700;
   }
 
   &__summary-row {
     @include flex-row;
     justify-content: space-between;
-    font-size: $text-sm;
-    color: $text-muted;
+    font-size: 15px;
+    color: rgb(81, 81, 81);
 
     &--total {
       font-family: $font-heading;
-      font-size: $text-xl;
-      font-weight: 800;
+      font-size: 20px;
+      font-weight: 680;
       color: $color-secondary;
       padding-top: $space-3;
       border-top: 1px solid $color-border;
 
-      span:last-child { color: $color-primary; }
+      span:last-child { color: #f97316; }
     }
   }
 
   &__checkout-btn {
     @include btn-primary;
+    background: #f97316;
     width: 100%;
     padding: $space-4;
     font-size: $text-base;
     border-radius: $radius-lg;
     margin-bottom: $space-3;
+
+    &:hover {
+      background: color.adjust(#f97316, $lightness: -8%);
+      box-shadow: 0 6px 18px rgba($color-success, 0.3);
+    }
   }
 
   &__continue-btn {
@@ -197,7 +232,7 @@ const grand = computed(() => cart.totalPrice + tax.value)
     padding: $space-2;
     transition: $transition-fast;
 
-    &:hover { color: $color-secondary; }
+    &:hover { color: #f97316; text-decoration: underline; }
   }
 }
 </style>
