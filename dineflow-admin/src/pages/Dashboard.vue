@@ -1,12 +1,10 @@
 <template>
   <div class="space-y-6">
-    <!-- Top Header -->
     <div>
       <h1 class="!text-2xl font-heading !font-bold text-secondary tracking-tight" style="font-weight: 700 !important;">Good Morning</h1>
       <p class="text-[#494949] font-semibold">Welcome back, Admin. Here is what is happening at DineFlow.</p>
     </div>
 
-    <!-- statistics cards grid -->
     <a-row :gutter="[24, 24]">
       <a-col :xs="24" :sm="12" :lg="6" v-for="stat in statistics" :key="stat.title">
         <a-card class="shadow-sm rounded-xl border-slate-100 hover:shadow-md transition-shadow">
@@ -28,10 +26,8 @@
       </a-col>
     </a-row>
 
-    <!-- MAIN TWO COLUMN GRID FOR CONTENT -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       
-      <!-- LEFT CONTAINER: Live Orders Controller -->
       <div class="lg:col-span-2">
         <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
@@ -40,7 +36,6 @@
               <p class="text-xs text-slate-400 font-medium">Click on actions to advance dish status in real-time</p>
             </div>
             
-            <!-- Category Filter Tabs -->
             <div class="bg-slate-50 p-1 rounded-xl border border-slate-100 flex self-start sm:self-center">
               <button 
                 v-for="tab in ['All', 'Preparing', 'Ready', 'Delivered']" 
@@ -63,19 +58,16 @@
             class="font-sans"
           >
             <template #bodyCell="{ column, record }">
-              <!-- ID Column -->
               <template v-if="column.dataIndex === 'id'">
                 <span class="font-bold text-secondary font-mono">{{ record.id }}</span>
               </template>
 
-              <!-- Table Column -->
               <template v-else-if="column.dataIndex === 'table'">
                 <span class="font-semibold text-slate-600">
                   <span class="mr-1 text-slate-400">🪑</span> {{ record.table }}
                 </span>
               </template>
 
-              <!-- Items Column -->
               <template v-else-if="column.dataIndex === 'items'">
                 <div class="flex flex-wrap gap-1 py-1 max-w-xs">
                   <template v-if="record.items && record.items !== 'No items'">
@@ -97,7 +89,6 @@
                 </div>
               </template>
 
-              <!-- Status badge -->
               <template v-else-if="column.dataIndex === 'status'">
                 <span 
                   class="px-3 py-1 rounded-full text-xs font-bold"
@@ -111,12 +102,10 @@
                 </span>
               </template>
               
-              <!-- Total -->
               <template v-else-if="column.dataIndex === 'total'">
                 <span class="font-semibold">${{ record.total.toFixed(2) }}</span>
               </template>
 
-              <!-- Actions Column -->
               <template v-else-if="column.key === 'action'">
                 <div class="flex items-center gap-3">
                   <a-button 
@@ -148,14 +137,13 @@
         </div>
       </div>
 
-      <!-- RIGHT CONTAINER: Kitchen Load & Service Log activity -->
+      
       <div class="space-y-6">
         
-        <!-- Kitchen Health Metrics Card -->
         <div class="bg-white rounded-xl p-6 border border-slate-100 shadow-sm">
           <h2 class="text-base font-bold text-secondary mb-4 tracking-tight">Kitchen Capacity</h2>
           <div class="space-y-5">
-            <!-- Loading Indicator -->
+            
             <div>
               <div class="flex justify-between text-xs font-bold mb-1.5 text-slate-500">
                 <span>Cooking Throughput</span>
@@ -169,7 +157,7 @@
               </div>
             </div>
 
-            <!-- Health Quick Grid Stats -->
+            
             <div class="grid grid-cols-2 gap-3 pt-2">
               <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Avg Prep Time</p>
@@ -183,7 +171,7 @@
           </div>
         </div>
 
-        <!-- Real-Time Activity Logs Terminal -->
+        
         <div class="bg-white rounded-xl p-6 border border-slate-100 shadow-sm relative overflow-hidden">
           <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
             <h2 class="text-base font-bold text-secondary tracking-tight">Service Log</h2>
@@ -233,7 +221,6 @@ const dbStats = ref({
   efficiency: '100.0%'
 })
 
-// Filtered array computed from the selected category tabs
 const filteredOrders = computed(() => {
   if (activeTab.value === 'All') return mockOrders.value
   return mockOrders.value.filter(order => order.status === activeTab.value)
@@ -250,7 +237,6 @@ const columns = [
   { title: 'Quick Action', key: 'action', align: 'right' as const },
 ]
 
-// Kitchen load capacity computed from orders list
 const kitchenCapacity = computed(() => {
   const prepCount = mockOrders.value.filter(o => o.status === 'Preparing').length
   const totalCount = mockOrders.value.length
@@ -258,7 +244,6 @@ const kitchenCapacity = computed(() => {
   return Math.round((prepCount / totalCount) * 100)
 })
 
-// Dynamic stats computed reactively
 const activeOrdersCount = computed(() => mockOrders.value.filter(o => o.status !== 'Delivered').length)
 const dynamicRevenue = computed(() => dbStats.value.revenue)
 
@@ -302,7 +287,6 @@ const advanceStatus = async (key: string, nextStatus: 'Ready' | 'Delivered') => 
     await orderService.updateOrderStatus(orderId, nextStatus)
     targetOrder.status = nextStatus
 
-    // Push new activity logs cleanly
     const timeNow = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' })
     let logMsg = ''
     if (nextStatus === 'Ready') {
@@ -315,7 +299,6 @@ const advanceStatus = async (key: string, nextStatus: 'Ready' | 'Delivered') => 
     
     activityLogs.value.unshift({ time: timeNow, message: logMsg })
 
-    // Refresh stats silently
     const stats = await orderService.getDashboardStats()
     dbStats.value = {
       activeOrders: stats.activeOrders,
@@ -333,7 +316,6 @@ const advanceStatus = async (key: string, nextStatus: 'Ready' | 'Delivered') => 
 onMounted(() => {
   fetchDashboardData()
 
-  // Subscribe to real-time updates from database
   realTimeSubscription = orderService.subscribeToLiveOrders(() => {
     fetchDashboardData(true)
   })
@@ -347,10 +329,9 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* Ensure Ant Design table headers match our clean aesthetic */
 :deep(.ant-table-thead .ant-table-cell) {
-  background-color: #f8fafc; /* slate-50 */
-  color: #64748b; /* slate-500 */
+  background-color: #f8fafc;
+  color: #64748b; 
   font-weight: 600;
   border-bottom: 1px solid #f1f5f9;
   padding: 10px 12px !important;

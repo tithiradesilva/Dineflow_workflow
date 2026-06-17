@@ -5,42 +5,42 @@ import Dashboard from '../pages/Dashboard.vue'
 import Login from '../pages/Login.vue'
 
 const routes: Array<RouteRecordRaw> = [
-    {
-        path: '/login',
-        name: 'Login',
-        component: Login
-    },
-    {
-        path: '/',
-        component: AdminLayout, // The Layout is the parent
-        children: [
-            {
-                path: '', // Empty string means it loads at the parent's path ('/')
-                name: 'Dashboard',
-                component: Dashboard
-            },
-            {
-                path: 'menu-crud',
-                name: 'MenuManager',
-                component: () => import('../pages/MenuManager.vue')
-            },
-            {
-                path: 'orders',
-                name: 'Orders',
-                component: () => import('../pages/Orders.vue')
-            },
-            {
-                path: 'coupons',
-                name: 'Coupons',
-                component: () => import('../pages/Coupons.vue')
-            }
-        ]
-    }
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login
+  },
+  {
+    path: '/',
+    component: AdminLayout,
+    children: [
+      {
+        path: '',
+        name: 'Dashboard',
+        component: Dashboard
+      },
+      {
+        path: 'menu-crud',
+        name: 'MenuManager',
+        component: () => import('../pages/MenuManager.vue')
+      },
+      {
+        path: 'orders',
+        name: 'Orders',
+        component: () => import('../pages/Orders.vue')
+      },
+      {
+        path: 'coupons',
+        name: 'Coupons',
+        component: () => import('../pages/Coupons.vue')
+      }
+    ]
+  }
 ]
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes
+  history: createWebHistory(),
+  routes
 })
 
 import { useAuthStore } from '../stores/authStore'
@@ -49,7 +49,6 @@ import { authService } from '../services/authService'
 router.beforeEach(async (to, _from, next) => {
   const authStore = useAuthStore()
 
-  // Auto-restore session from Supabase on page load/refresh
   if (!authStore.user) {
     try {
       const currentUser = await authService.getCurrentUser()

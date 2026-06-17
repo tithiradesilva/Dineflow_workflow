@@ -1,13 +1,11 @@
 <template>
   <div class="space-y-6 animate-fade-in">
-    <!-- Header Block -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
         <h1 class="text-2xl font-heading !font-bold text-secondary tracking-tight" style="font-weight: 700 !important;">Menu Manager</h1>
         <p class="text-[#494949] font-semibold">Create, edit, and manage your restaurant's digital offerings.</p>
       </div>
       <div class="flex flex-wrap items-center gap-3">
-        <!-- Add Category Button -->
         <a-button 
           type="default" 
           size="large"
@@ -18,7 +16,6 @@
           <span>Add Category</span>
         </a-button>
 
-        <!-- Add Dish Button -->
         <a-button 
           type="primary" 
           size="large"
@@ -31,9 +28,7 @@
       </div>
     </div>
 
-    <!-- Table Section -->
     <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-      <!-- Category Filter Tabs -->
       <div class="mb-6 border-b border-slate-100">
         <a-tabs v-model:activeKey="selectedCategory">
           <a-tab-pane key="All" tab="All Dishes" />
@@ -54,8 +49,6 @@
         class="font-sans"
       >
         <template #bodyCell="{ column, record }">
-          
-          <!-- Name & Image Column -->
           <template v-if="column.dataIndex === 'name'">
             <div class="flex items-center gap-4 py-1">
               <img 
@@ -72,19 +65,16 @@
             </div>
           </template>
 
-          <!-- Category Column -->
           <template v-else-if="column.dataIndex === 'category'">
             <span class="font-semibold text-slate-600 text-sm">
               {{ record.category }}
             </span>
           </template>
 
-          <!-- Price Column -->
           <template v-else-if="column.dataIndex === 'price'">
             <span class="font-bold text-slate-700 text-sm">${{ record.price.toFixed(2) }}</span>
           </template>
 
-          <!-- Inventory/Quantity Column -->
           <template v-else-if="column.dataIndex === 'quantity'">
             <span v-if="!record.track_stock || record.quantity === -1" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-100/60">
               Unlimited ♾️
@@ -97,7 +87,6 @@
             </span>
           </template>
 
-          <!-- Status Column -->
           <template v-else-if="column.dataIndex === 'is_available'">
             <span 
               class="px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider border"
@@ -107,7 +96,6 @@
             </span>
           </template>
 
-          <!-- Actions Column (Large icon-only buttons with background for premium clarity) -->
           <template v-else-if="column.key === 'actions'">
             <div class="flex justify-end gap-2.5">
               <a-button 
@@ -141,7 +129,6 @@
       </a-table>
     </div>
 
-    <!-- --- POPUP 1: DISH FORM MODAL (Centered, Spacious) --- -->
     <a-modal 
       v-model:open="isModalVisible" 
       :title="modalMode === 'add' ? 'Create New Dish' : 'Edit Dish'" 
@@ -156,7 +143,6 @@
       :cancelButtonProps="{ class: 'rounded-xl font-medium h-11 px-5 border-slate-200 hover:border-slate-300' }"
     >
       <a-form layout="vertical" :model="formState" class="mt-5 space-y-4 custom-form">
-        <!-- Image Preview & Action Block (Sleek layout for modern look) -->
         <div class="flex flex-col sm:flex-row items-center gap-5 p-4 bg-slate-50/80 border border-slate-100 rounded-2xl">
           <img 
             :src="formState.image || 'https://images.unsplash.com/photo-1495521821757-a1efb6729352?auto=format&fit=crop&w=300&q=80'" 
@@ -177,7 +163,6 @@
           </div>
         </div>
 
-        <!-- Name Field -->
         <a-form-item label="Dish Name" required class="mb-0">
           <a-input 
             v-model:value="formState.name" 
@@ -188,7 +173,6 @@
         </a-form-item>
         
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <!-- Category Selector with Labeled Button -->
           <a-form-item label="Category" required class="mb-0">
             <div class="flex items-center gap-2 w-full">
               <a-select 
@@ -211,7 +195,6 @@
             </div>
           </a-form-item>
           
-          <!-- Price Field with Visual + and - buttons -->
           <a-form-item label="Price ($)" required class="mb-0">
             <div class="flex items-center gap-2 w-full">
               <a-button 
@@ -242,7 +225,6 @@
           </a-form-item>
         </div>
 
-        <!-- Quantity & Stock Section -->
         <div class="p-4 bg-slate-50/80 border border-slate-100 rounded-2xl space-y-4 mb-4">
           <div class="flex items-center justify-between">
             <div class="flex flex-col">
@@ -262,12 +244,10 @@
           </div>
         </div>
 
-        <!-- Description -->
         <a-form-item label="Description" class="mb-0">
           <a-textarea v-model:value="formState.description" :rows="3" placeholder="Describe ingredients, tastes, or notes..." class="rounded-lg font-medium" />
         </a-form-item>
 
-        <!-- Availability Switch -->
         <a-form-item class="mb-0">
           <a-checkbox v-model:checked="formState.is_available" class="font-semibold text-slate-600">
             Item is currently active and available for orders
@@ -276,7 +256,6 @@
       </a-form>
     </a-modal>
 
-    <!-- --- POPUP 2: ADD CATEGORY MODAL (Centered, Medium size) --- -->
     <a-modal 
       v-model:open="isCategoryModalVisible" 
       title="Create New Category" 
@@ -307,7 +286,6 @@
       </div>
     </a-modal>
 
-    <!-- --- POPUP 3: IMAGE SELECTOR/EDITOR MODAL (Centered, Spacious) --- -->
     <a-modal 
       v-model:open="isImageModalVisible" 
       title="Food Illustration & Image Selector" 
@@ -321,7 +299,6 @@
       :cancelButtonProps="{ class: 'rounded-xl font-medium h-11 px-5 border-slate-200 hover:border-slate-300' }"
     >
       <div class="mt-5 space-y-6">
-        <!-- Live Preview Block -->
         <div class="flex items-center gap-4 p-4 bg-slate-50 border border-slate-100 rounded-2xl">
           <img 
             :src="imageFormUrl || 'https://images.unsplash.com/photo-1495521821757-a1efb6729352?auto=format&fit=crop&w=300&q=80'" 
@@ -335,7 +312,6 @@
           </div>
         </div>
 
-        <!-- Preset Selection Grid -->
         <div class="space-y-3">
           <span class="text-sm font-bold text-slate-700 block">Premium Food Presets</span>
           <div class="grid grid-cols-3 sm:grid-cols-6 gap-3">
@@ -357,9 +333,7 @@
           </div>
         </div>
 
-        <!-- Custom Image Source Block -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-4 border-t border-slate-100">
-          <!-- File Upload -->
           <div class="space-y-2">
             <span class="text-xs font-bold text-slate-600 block">Upload Local Image File</span>
             <div class="relative border-2 border-dashed border-slate-200 hover:border-primary rounded-xl p-4 transition-colors text-center cursor-pointer flex flex-col items-center justify-center gap-1.5 min-h-[96px] bg-slate-50/40">
@@ -374,7 +348,6 @@
             </div>
           </div>
 
-          <!-- URL Input -->
           <div class="space-y-2">
             <span class="text-xs font-bold text-slate-600 block">Or Paste Custom Image URL</span>
             <div class="space-y-2">
@@ -408,7 +381,6 @@ import {
 } from '@ant-design/icons-vue'
 import { menuService } from '../services/menuService'
 
-// --- TABLE CONFIGURATION ---
 const columns = [
   { title: 'Item', dataIndex: 'name', key: 'name', width: '35%' },
   { title: 'Category', dataIndex: 'category', key: 'category', width: '15%' },
@@ -418,7 +390,6 @@ const columns = [
   { title: 'Actions', key: 'actions', align: 'right' as const }
 ]
 
-// --- STATE ---
 const categories = ref<string[]>([])
 const selectedCategory = ref('All')
 const mockMenuItems = ref<any[]>([])
@@ -444,7 +415,6 @@ onMounted(() => {
   loadData()
 })
 
-// --- FILTERED MENU ITEMS ---
 const filteredMenuItems = computed(() => {
   if (selectedCategory.value === 'All') {
     return mockMenuItems.value
@@ -452,7 +422,6 @@ const filteredMenuItems = computed(() => {
   return mockMenuItems.value.filter(item => item.category === selectedCategory.value)
 })
 
-// --- DISH MODAL & FORM STATE ---
 const isModalVisible = ref(false)
 const modalMode = ref<'add' | 'edit'>('add')
 
@@ -496,7 +465,7 @@ const openModal = (record?: any) => {
   resetForm()
   if (record) {
     modalMode.value = 'edit'
-    // Copy record data into form
+
     Object.assign(formState, {
       ...record,
       track_stock: record.track_stock ?? (record.quantity !== -1 && record.quantity !== undefined),
@@ -514,7 +483,6 @@ const handleSave = async () => {
     return
   }
 
-  // Adjust is_available automatically if tracking stock and it is 0
   if (formState.track_stock && formState.quantity <= 0) {
     formState.is_available = false
   }
@@ -563,7 +531,6 @@ const handleDelete = async (id: number) => {
   }
 }
 
-// --- ADD CATEGORY POPUP STATE ---
 const isCategoryModalVisible = ref(false)
 const newCategoryName = ref('')
 
@@ -596,7 +563,6 @@ const handleSaveCategory = async () => {
   }
 }
 
-// --- IMAGE SELECTOR POPUP STATE ---
 const isImageModalVisible = ref(false)
 const imageFormUrl = ref('')
 const selectedPresetIndex = ref<number | null>(null)
@@ -645,7 +611,6 @@ const handleSaveImage = () => {
 </script>
 
 <style scoped>
-/* Table custom styling */
 :deep(.ant-table-thead > tr > th) {
   background-color: #ffffff !important;
   color: #64748b;
@@ -653,7 +618,6 @@ const handleSaveImage = () => {
   border-bottom: 1px solid #f1f5f9;
 }
 
-/* Category Tabs design styling */
 :deep(.ant-tabs-nav) {
   margin-bottom: 0 !important;
 }
@@ -679,7 +643,6 @@ const handleSaveImage = () => {
   background-color: #E63946 !important;
 }
 
-/* Micro-animations */
 .animate-fade-in {
   animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
@@ -705,7 +668,6 @@ const handleSaveImage = () => {
   color: #1e293b !important;
 }
 
-/* Ensure identical tall height for form controls in the popup */
 .custom-height-select,
 .custom-height-input {
   height: 44px !important;
@@ -722,7 +684,6 @@ const handleSaveImage = () => {
   line-height: 1 !important;
 }
 
-/* Perfect alignment centering for any button text/icon wrappers */
 :deep(.ant-btn) {
   display: inline-flex !important;
   align-items: center !important;
@@ -738,7 +699,6 @@ const handleSaveImage = () => {
   margin-top: 0 !important;
 }
 
-/* Ensure the internal elements of Ant Design Select & InputNumber scale properly */
 :deep(.custom-height-select .ant-select-selector) {
   height: 44px !important;
   padding: 0 12px !important;
@@ -762,12 +722,10 @@ const handleSaveImage = () => {
   text-align: center !important;
 }
 
-/* Tighten form items vertical margins */
 :deep(.custom-form .ant-form-item) {
   margin-bottom: 0 !important;
 }
 
-/* Bold the form labels (Dish Name, Category, Price, Description, etc.) a little bit */
 :deep(.ant-form-item-label > label) {
   font-weight: 600 !important;
   color: #334155 !important;

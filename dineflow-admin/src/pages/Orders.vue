@@ -1,12 +1,10 @@
 <template>
   <div class="space-y-6 animate-fade-in">
-    <!-- Header Block -->
     <div>
       <h1 class="text-2xl font-heading !font-bold text-secondary tracking-tight" style="font-weight: 700 !important;">Orders History</h1>
       <p class="text-[#494949] font-semibold">View and track historical and active customer orders.</p>
     </div>
 
-    <!-- Quick statistics grid -->
     <a-row :gutter="[24, 24]">
       <a-col :xs="24" :sm="12" :lg="6" v-for="stat in statistics" :key="stat.title">
         <a-card class="shadow-sm rounded-xl border-slate-100 hover:shadow-md transition-shadow">
@@ -23,12 +21,8 @@
       </a-col>
     </a-row>
 
-    <!-- Main Container -->
     <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-      
-      <!-- Control Bar -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-        <!-- Search Input -->
         <div class="w-full sm:max-w-xs">
           <a-input 
             v-model:value="searchQuery" 
@@ -42,7 +36,6 @@
           </a-input>
         </div>
 
-        <!-- Status Filter Tabs -->
         <div class="bg-slate-50 p-1 rounded-xl border border-slate-100 flex self-start sm:self-center">
           <button 
             v-for="tab in ['All', 'Preparing', 'Ready', 'Delivered']" 
@@ -56,7 +49,6 @@
         </div>
       </div>
 
-      <!-- Orders Table -->
       <a-table 
         :columns="columns" 
         :data-source="filteredOrders" 
@@ -72,24 +64,20 @@
       >
         <template #bodyCell="{ column, record }">
           
-          <!-- ID Column -->
           <template v-if="column.dataIndex === 'id'">
             <span class="font-bold text-secondary font-mono">{{ record.id }}</span>
           </template>
 
-          <!-- Table -->
           <template v-else-if="column.dataIndex === 'table'">
             <span class="font-semibold text-slate-600">
               <span class="mr-1 text-slate-400">🪑</span> {{ record.table }}
             </span>
           </template>
 
-          <!-- Created At / Date -->
           <template v-else-if="column.dataIndex === 'created_at'">
             <span class="text-slate-500 font-medium">{{ formatDate(record.created_at) }}</span>
           </template>
 
-          <!-- Items Summary Column -->
           <template v-else-if="column.dataIndex === 'items'">
             <div class="flex flex-wrap gap-1 py-1 max-w-xs">
               <template v-if="record.items && record.items !== 'No items'">
@@ -111,7 +99,6 @@
             </div>
           </template>
 
-          <!-- Status badge -->
           <template v-else-if="column.dataIndex === 'status'">
             <span 
               class="px-3 py-1 rounded-full text-xs font-bold border"
@@ -125,12 +112,10 @@
             </span>
           </template>
           
-          <!-- Total -->
           <template v-else-if="column.dataIndex === 'total'">
             <span class="font-bold text-slate-700">${{ record.total.toFixed(2) }}</span>
           </template>
 
-          <!-- Payment Method -->
           <template v-else-if="column.dataIndex === 'payment_method'">
             <span 
               class="px-2.5 py-1 rounded-full text-xs font-bold border"
@@ -142,10 +127,8 @@
             </span>
           </template>
 
-          <!-- Actions Column -->
           <template v-else-if="column.key === 'actions'">
             <div class="flex items-center gap-3">
-              <!-- View details -->
               <a-button 
                 size="small"
                 type="default"
@@ -155,7 +138,6 @@
                 🔍 Details
               </a-button>
 
-              <!-- Quick Advance Status Actions -->
               <a-button 
                 v-if="record.status === 'Preparing'"
                 size="small"
@@ -183,7 +165,6 @@
 
     </div>
 
-    <!-- --- POPUP: ORDER DETAILS DRAWER / MODAL --- -->
     <a-modal 
       v-model:open="isDetailsModalVisible" 
       title="Order Detail Summary" 
@@ -192,7 +173,6 @@
       :footer="null"
     >
       <div v-if="selectedOrder" class="mt-5 space-y-6">
-        <!-- Order Header info -->
         <div class="flex items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-2xl">
           <div>
             <span class="text-xs font-bold text-slate-400 block uppercase tracking-wider">Order ID</span>
@@ -217,7 +197,6 @@
           </div>
         </div>
 
-        <!-- Ordered Items list -->
         <div class="space-y-3">
           <span class="text-sm font-bold text-slate-700 block">Ordered Items</span>
           
@@ -242,7 +221,6 @@
           </div>
         </div>
 
-        <!-- Grand Total block -->
         <div class="space-y-2 pt-4 border-t border-slate-100">
           <div v-if="selectedOrder.subtotal > 0" class="flex items-center justify-between text-sm">
             <span class="text-slate-500 font-medium">Subtotal</span>
@@ -265,7 +243,6 @@
           </div>
         </div>
 
-        <!-- Payment Method Badge -->
         <div class="flex items-center justify-between pt-3 border-t border-slate-100">
           <span class="text-sm font-bold text-slate-500">Payment Method</span>
           <span 
@@ -300,7 +277,6 @@ const isLoading = ref(false)
 const searchQuery = ref('')
 const activeStatusFilter = ref('All')
 
-// Modal/Drawer details
 const isDetailsModalVisible = ref(false)
 const selectedOrder = ref<any>(null)
 const selectedOrderItems = ref<any[]>([])
@@ -317,7 +293,6 @@ const columns = [
   { title: 'Actions', key: 'actions', align: 'right' as const }
 ]
 
-// Fetch orders history
 const fetchOrders = async () => {
   isLoading.value = true
   try {
@@ -329,7 +304,6 @@ const fetchOrders = async () => {
   }
 }
 
-// Stats computations
 const statistics = computed(() => {
   const total = orders.value.length
   const delivered = orders.value.filter(o => o.status === 'Delivered').length
@@ -344,7 +318,6 @@ const statistics = computed(() => {
   ]
 })
 
-// Filter and search
 const filteredOrders = computed(() => {
   return orders.value.filter(order => {
     const matchesSearch = 

@@ -79,14 +79,12 @@ export const orderService = {
   },
 
   async getDashboardStats() {
-    // 1. Fetch orders
     const { data: ordersData, error: ordersError } = await supabase
       .from('orders')
       .select('total, status, created_at, updated_at')
 
     if (ordersError) throw ordersError
 
-    // 2. Fetch total active available menu items count
     const { data: itemsData, error: itemsError } = await supabase
       .from('menu_items')
       .select('id')
@@ -98,7 +96,6 @@ export const orderService = {
     const revenue = (ordersData || []).reduce((acc: number, o: any) => acc + Number(o.total), 0)
     const uniqueTables = new Set((ordersData || []).map((o: any) => o.table_name)).size
 
-    // Calculate actual average prep time for completed orders (Ready or Delivered)
     const completedOrders = (ordersData || []).filter((o: any) =>
       (o.status === 'Ready' || o.status === 'Delivered') && o.updated_at && o.created_at
     )
@@ -112,7 +109,6 @@ export const orderService = {
       avgPrepTimeMinutes = (totalDiffMs / completedOrders.length) / 60000
     }
 
-    // Calculate Efficiency (ratio of completed/delivered orders vs total orders, default to 100% if empty)
     const deliveredCount = (ordersData || []).filter((o: any) => o.status === 'Delivered').length
     const totalCount = (ordersData || []).length
     const efficiencyPercent = totalCount > 0 ? (deliveredCount / totalCount) * 100 : 100

@@ -1,7 +1,5 @@
 import { supabase } from '../lib/supabaseClient'
 
-// --- Type Definitions ---
-
 export interface Coupon {
   id: number
   code: string
@@ -9,8 +7,6 @@ export interface Coupon {
   is_active: boolean
   created_at?: string
 }
-
-// --- Coupon Service (Admin CRUD) ---
 
 export const couponService = {
 

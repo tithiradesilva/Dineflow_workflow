@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// Logic goes here later
+
 </script>
 
 <template>

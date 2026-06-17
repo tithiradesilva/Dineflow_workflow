@@ -23,10 +23,8 @@ const authStore = useAuthStore()
 const collapsed = ref(false)
 const mobileMenuVisible = ref(false)
 
-// Select key mapping to active path
 const selectedKeys = ref([route.path])
 
-// Retrieve current logged in user details cleanly
 const userEmail = computed(() => authStore.user?.email || 'admin@dineflow.com')
 const userInitials = computed(() => {
   const email = userEmail.value
@@ -35,7 +33,7 @@ const userInitials = computed(() => {
 
 const navigateTo = (path: string) => {
   router.push(path)
-  mobileMenuVisible.value = false // close mobile drawer if navigating
+  mobileMenuVisible.value = false 
 }
 
 const handleLogout = async () => {
@@ -43,7 +41,6 @@ const handleLogout = async () => {
   router.push('/login')
 }
 
-// Map the path to a readable page title
 const pageTitle = computed(() => {
   switch (route.path) {
     case '/': return 'Dashboard'
@@ -58,7 +55,6 @@ const pageTitle = computed(() => {
 <template>
   <a-layout class="min-h-screen bg-slate-50 font-sans">
     
-    <!-- 1. DESKTOP SIDEBAR (Premium Dark Theme Sidebar) -->
     <a-layout-sider 
       v-model:collapsed="collapsed" 
       :trigger="null"
@@ -70,7 +66,6 @@ const pageTitle = computed(() => {
     >
       <div class="flex flex-col h-screen sticky top-0 justify-between">
         <div>
-          <!-- Brand Logo & Header (No bottom divider lines!) -->
           <div class="h-16 flex items-center px-6 bg-transparent select-none">
             <div class="flex items-center space-x-2.5 overflow-hidden">
               <div class="w-8 h-8 rounded-lg bg-orange-500 flex items-center justify-center text-white shrink-0 text-base shadow-lg shadow-orange-500/20">
@@ -82,7 +77,6 @@ const pageTitle = computed(() => {
             </div>
           </div>
           
-          <!-- Dark Side Menu Navigation (No line dividers near tabs!) -->
           <a-menu 
             v-model:selectedKeys="selectedKeys" 
             mode="inline" 
@@ -120,7 +114,6 @@ const pageTitle = computed(() => {
           </a-menu>
         </div>
 
-        <!-- Custom Sidebar Bottom Expander (Merged with sidebar, transparent bg, white text, hover light bg) -->
         <div class="px-4 py-4 select-none">
           <button 
             @click="collapsed = !collapsed"
@@ -134,7 +127,6 @@ const pageTitle = computed(() => {
       </div>
     </a-layout-sider>
 
-    <!-- 2. MOBILE SIDEBAR DRAWER (Visible on mobile/tablet) -->
     <a-drawer
       v-model:open="mobileMenuVisible"
       placement="left"
@@ -154,7 +146,6 @@ const pageTitle = computed(() => {
         </div>
       </template>
 
-      <!-- Side Navigation inside mobile drawer (Matching dark style) -->
       <a-menu 
         v-model:selectedKeys="selectedKeys" 
         mode="inline" 
@@ -192,15 +183,10 @@ const pageTitle = computed(() => {
       </a-menu>
     </a-drawer>
 
-    <!-- MAIN RIGHT SECTION -->
     <a-layout class="flex flex-col min-h-screen">
       
-      <!-- TOP HEADER (Fully Responsive) -->
       <a-layout-header class="bg-white px-4 md:px-6 flex items-center justify-between border-b border-slate-100 h-16 shrink-0 z-10 shadow-sm">
-        
-        <!-- Mobile Left Area (Hamburger) & Desktop Left Area (Title) -->
         <div class="flex items-center space-x-4">
-          <!-- Mobile Menu Trigger -->
           <button 
             @click="mobileMenuVisible = true" 
             class="block md:hidden p-1.5 hover:bg-slate-100 rounded-lg text-secondary transition-colors cursor-pointer"
@@ -208,29 +194,24 @@ const pageTitle = computed(() => {
             <MenuOutlined class="text-xl" />
           </button>
           
-          <!-- Route Title Display -->
           <div class="hidden sm:block">
             <h1 class="text-lg font-heading !font-bold text-secondary tracking-tight m-0" style="font-weight: 700 !important;">
               {{ pageTitle }}
             </h1>
           </div>
           
-          <!-- Mobile Brand Title Logo (Centered in header on small mobile layout) -->
           <div class="block sm:hidden flex items-center space-x-1.5 select-none">
             <span class="text-lg">🍳</span>
             <span class="text-base font-heading font-black text-secondary tracking-tight">DineFlow</span>
           </div>
         </div>
 
-        <!-- Right Header Area (Utilities & Profile) -->
         <div class="flex items-center space-x-4 select-none">
-          <!-- Live Engine / DB Status Badge -->
           <div class="hidden md:flex items-center space-x-1.5 px-3 py-1 bg-emerald-50 rounded-full border border-emerald-100">
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
             <span class="text-[10px] font-bold text-emerald-700 tracking-wider uppercase">Engine Live</span>
           </div>
 
-          <!-- Notification Bell Trigger (Visual decoration) -->
           <button class="relative p-2 text-slate-400 hover:text-secondary hover:bg-slate-50 rounded-full transition-colors cursor-pointer">
             <BellOutlined class="text-lg" />
             <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-primary rounded-full ring-2 ring-white"></span>
@@ -238,10 +219,8 @@ const pageTitle = computed(() => {
 
           <div class="h-6 w-[1px] bg-slate-100 hidden sm:block"></div>
 
-          <!-- User Profile Dropdown Widget -->
           <a-dropdown :trigger="['click']" placement="bottomRight">
             <div class="flex items-center space-x-2 cursor-pointer p-1.5 hover:bg-slate-50 rounded-xl transition-all">
-              <!-- Avatar Circle -->
               <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-secondary to-[#2c476f] text-white flex items-center justify-center font-bold text-sm shadow-sm uppercase">
                 {{ userInitials }}
               </div>
@@ -254,7 +233,6 @@ const pageTitle = computed(() => {
             
             <template #overlay>
               <a-menu class="shadow-xl rounded-xl border border-slate-50 min-w-[200px] p-2 mt-1">
-                <!-- Dropdown Header Info -->
                 <div class="px-3.5 py-2">
                   <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Signed In As</p>
                   <p class="text-xs font-bold text-secondary truncate mt-0.5">{{ userEmail }}</p>
@@ -273,7 +251,6 @@ const pageTitle = computed(() => {
         </div>
       </a-layout-header>
 
-      <!-- MAIN COMPONENT CONTAINER (Fully Responsive Spacing) -->
       <a-layout-content class="flex-1 p-4 md:p-6 overflow-y-auto">
         <router-view />
       </a-layout-content>
@@ -282,7 +259,6 @@ const pageTitle = computed(() => {
 </template>
 
 <style scoped>
-/* Force white background, proper heights and clean border lines on the layout header */
 :deep(.ant-layout-header) {
   background: white !important;
   padding: 0 16px !important;
@@ -294,7 +270,6 @@ const pageTitle = computed(() => {
   justify-content: space-between !important;
 }
 
-/* Reset heading margins and normalize line-height for pixel-perfect vertical centering */
 :deep(.ant-layout-header) h1 {
   margin: 0 !important;
   line-height: 1.5 !important;
@@ -306,9 +281,8 @@ const pageTitle = computed(() => {
   }
 }
 
-/* Ant Design Dark Sider & Menu overrides for premium contrast */
 :deep(.ant-layout-sider) {
-  background: #1a1a1a !important; /* Dark grey */
+  background: #1a1a1a !important; 
   border-right: none !important;
 }
 
@@ -316,37 +290,32 @@ const pageTitle = computed(() => {
   background: transparent !important;
 }
 
-/* Menu item default unselected state */
 :deep(.ant-menu-dark .ant-menu-item) {
   margin: 6px 12px !important;
   width: calc(100% - 24px) !important;
   height: 44px !important;
   line-height: 44px !important;
-  color: #94a3b8 !important; /* Slate 400 */
+  color: #94a3b8 !important; 
   background-color: transparent !important;
   transition: all 0.2s ease-in-out;
 }
 
-/* Force correct width and margin when the sidebar is collapsed to prevent right-overflow */
 :deep(.ant-layout-sider-collapsed .ant-menu-item) {
   margin: 6px 8px !important;
   width: calc(100% - 16px) !important;
 }
 
-/* Menu item hover state */
 :deep(.ant-menu-dark .ant-menu-item:hover) {
   color: #ffffff !important;
   background-color: rgba(255, 255, 255, 0.05) !important;
 }
 
-/* Menu item selected state (Vibrant Orange with Glowing Accent & Right Chevron) */
 :deep(.ant-menu-dark .ant-menu-item-selected) {
-  background-color: rgba(249, 115, 22, 0.15) !important; /* Translucent orange backdrop */
-  color: #f97316 !important; /* Vibrant Orange text */
+  background-color: rgba(249, 115, 22, 0.15) !important; 
+  color: #f97316 !important;
   box-shadow: inset 2px 0px 12px rgba(249, 115, 22, 0.05);
 }
 
-/* Selected item icon color matching text */
 :deep(.ant-menu-dark .ant-menu-item-selected .ant-menu-item-icon) {
   color: #f97316 !important;
 }

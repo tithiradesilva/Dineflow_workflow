@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-6 animate-fade-in">
-    <!-- Header Block -->
+    
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
         <h1 class="text-2xl font-heading !font-bold text-secondary tracking-tight" style="font-weight: 700 !important;">Coupon Manager</h1>
@@ -17,7 +17,7 @@
       </a-button>
     </div>
 
-    <!-- Quick Statistics Grid -->
+    
     <a-row :gutter="[24, 24]">
       <a-col :xs="24" :sm="12" :lg="8" v-for="stat in statistics" :key="stat.title">
         <a-card class="shadow-sm rounded-xl border-slate-100 hover:shadow-md transition-shadow">
@@ -34,10 +34,10 @@
       </a-col>
     </a-row>
 
-    <!-- Main Table Container -->
+    
     <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
       
-      <!-- Control Bar -->
+     
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div class="w-full sm:max-w-xs">
           <a-input 
@@ -52,7 +52,7 @@
           </a-input>
         </div>
 
-        <!-- Status Filter Tabs -->
+        
         <div class="bg-slate-50 p-1 rounded-xl border border-slate-100 flex self-start sm:self-center">
           <button 
             v-for="tab in ['All', 'Active', 'Inactive']" 
@@ -66,7 +66,7 @@
         </div>
       </div>
 
-      <!-- Coupons Table -->
+      
       <a-table 
         :columns="columns" 
         :data-source="filteredCoupons" 
@@ -81,19 +81,19 @@
       >
         <template #bodyCell="{ column, record }">
           
-          <!-- Code Column -->
+          
           <template v-if="column.dataIndex === 'code'">
             <span class="font-bold text-secondary font-mono text-sm bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-100">
               {{ record.code }}
             </span>
           </template>
 
-          <!-- Discount % Column -->
+          
           <template v-else-if="column.dataIndex === 'discount_percent'">
             <span class="font-bold text-primary text-sm">{{ record.discount_percent }}% OFF</span>
           </template>
 
-          <!-- Status Column -->
+          
           <template v-else-if="column.dataIndex === 'is_active'">
             <a-switch 
               :checked="record.is_active" 
@@ -103,12 +103,12 @@
             />
           </template>
 
-          <!-- Created At Column -->
+          
           <template v-else-if="column.dataIndex === 'created_at'">
             <span class="text-slate-500 font-medium text-sm">{{ formatDate(record.created_at) }}</span>
           </template>
 
-          <!-- Actions Column -->
+          
           <template v-else-if="column.key === 'actions'">
             <div class="flex justify-end gap-2.5">
               <a-button 
@@ -142,7 +142,7 @@
       </a-table>
     </div>
 
-    <!-- Add/Edit Coupon Modal -->
+    
     <a-modal 
       v-model:open="isModalVisible" 
       :title="modalMode === 'add' ? 'Create New Coupon' : 'Edit Coupon'" 
@@ -156,7 +156,7 @@
       :cancelButtonProps="{ class: 'rounded-xl font-medium h-11 px-5 border-slate-200 hover:border-slate-300' }"
     >
       <a-form layout="vertical" :model="formState" class="mt-5 space-y-4">
-        <!-- Coupon Code -->
+        
         <a-form-item label="Coupon Code" required class="mb-0">
           <a-input 
             v-model:value="formState.code" 
@@ -168,7 +168,7 @@
           <p class="text-[10px] text-slate-400 mt-1.5">Code will be auto-capitalized. Customers enter this at checkout.</p>
         </a-form-item>
 
-        <!-- Discount Percentage -->
+        
         <a-form-item label="Discount Percentage (%)" required class="mb-0">
           <div class="flex items-center gap-2 w-full">
             <a-button 
@@ -198,7 +198,7 @@
           </div>
         </a-form-item>
 
-        <!-- Active Status -->
+        
         <a-form-item class="mb-0">
           <a-checkbox v-model:checked="formState.is_active" class="font-semibold text-slate-600">
             Coupon is currently active and can be used by customers
@@ -225,7 +225,7 @@ import {
 import { couponService } from '../services/couponService'
 import type { Coupon } from '../services/couponService'
 
-// --- TABLE CONFIG ---
+
 const columns = [
   { title: 'Code', dataIndex: 'code', key: 'code', width: '25%' },
   { title: 'Discount', dataIndex: 'discount_percent', key: 'discount_percent', width: '20%' },
@@ -234,14 +234,14 @@ const columns = [
   { title: 'Actions', key: 'actions', align: 'right' as const }
 ]
 
-// --- STATE ---
+
 const coupons = ref<Coupon[]>([])
 const isLoading = ref(false)
 const isSaving = ref(false)
 const searchQuery = ref('')
 const activeFilter = ref('All')
 
-// --- LOAD DATA ---
+
 const loadCoupons = async () => {
   isLoading.value = true
   try {
@@ -272,7 +272,7 @@ const statistics = computed(() => {
   ]
 })
 
-// --- FILTER + SEARCH ---
+
 const filteredCoupons = computed(() => {
   return coupons.value.filter(coupon => {
     const matchesSearch = coupon.code.toLowerCase().includes(searchQuery.value.toLowerCase())
@@ -284,7 +284,7 @@ const filteredCoupons = computed(() => {
   })
 })
 
-// --- MODAL & FORM ---
+
 const isModalVisible = ref(false)
 const modalMode = ref<'add' | 'edit'>('add')
 
@@ -358,7 +358,7 @@ const handleSave = async () => {
   }
 }
 
-// --- TOGGLE ACTIVE ---
+
 const handleToggleActive = async (id: number, checked: boolean) => {
   try {
     await couponService.toggleActive(id, checked)
@@ -370,7 +370,7 @@ const handleToggleActive = async (id: number, checked: boolean) => {
   }
 }
 
-// --- DELETE ---
+
 const handleDelete = async (id: number) => {
   try {
     await couponService.deleteCoupon(id)
@@ -381,7 +381,7 @@ const handleDelete = async (id: number) => {
   }
 }
 
-// --- HELPERS ---
+
 const formatDate = (isoString: string) => {
   if (!isoString) return ''
   return new Date(isoString).toLocaleString('en-US', {
