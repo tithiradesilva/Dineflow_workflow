@@ -2,41 +2,35 @@
 import type { CartItem } from '@/stores/cartStore'
 import { useCartStore } from '@/stores/cartStore'
 
-// Props: the cart item to display
 const props = defineProps<{ item: CartItem }>()
 
 const cart = useCartStore()
 
 const fallbackImage = 'https://images.unsplash.com/photo-1495521821757-a1efb6729352?auto=format&fit=crop&w=300&q=80'
 
-// Computed subtotal for this item
 const subtotal = () => (props.item.price * props.item.cartQty).toFixed(2)
 </script>
 
 <template>
   <div class="cart-item">
 
-    <!-- Food thumbnail -->
     <img
       class="cart-item__image"
       :src="item.image || fallbackImage"
       :alt="item.name"
     />
 
-    <!-- Item name + unit price -->
     <div class="cart-item__info">
       <span class="cart-item__name">{{ item.name }}</span>
       <span class="cart-item__unit-price">${{ item.price.toFixed(2) }} each</span>
     </div>
 
-    <!-- Quantity Controls: − [qty] + -->
     <div class="cart-item__controls">
       <button class="cart-item__qty-btn" @click="cart.decreaseItem(item.id)">−</button>
       <span class="cart-item__qty">{{ item.cartQty }}</span>
       <button class="cart-item__qty-btn" @click="cart.addItem(item)">+</button>
     </div>
 
-    <!-- Subtotal + Remove -->
     <div class="cart-item__right">
       <span class="cart-item__subtotal">${{ subtotal() }}</span>
       <button class="cart-item__remove" @click="cart.removeItem(item.id)">Remove</button>
@@ -46,8 +40,6 @@ const subtotal = () => (props.item.price * props.item.cartQty).toFixed(2)
 </template>
 
 <style lang="scss" scoped>
-// CartItem styles — variables auto-injected by vite.config.ts
-
 .cart-item {
   @include flex-row($space-4);
   padding: $space-4;

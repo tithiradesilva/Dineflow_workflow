@@ -7,5 +7,4 @@ if (!supabaseUrl || !supabaseAnonKey) {
   console.error('Missing Supabase env variables — check your .env file')
 }
 
-// Single shared Supabase client for the entire customer app
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)

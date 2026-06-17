@@ -1,8 +1,3 @@
-// =============================================================
-// TheNavbar.scss — Styles for the top navigation bar
-// All values come from _variables.scss (auto-injected by vite).
-// =============================================================
-
 .navbar {
   position: sticky;
   top: 0;
@@ -10,11 +5,10 @@
   width: 100%;
   height: $navbar-height;
   background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);      // frosted glass effect
+  backdrop-filter: blur(10px);
   border-bottom: 1px solid $color-border;
   box-shadow: $shadow-sm;
 
-  // Inner container: logo + nav links + cart icon
   &__inner {
     @include container;
     @include flex-row($space-6);
@@ -22,7 +16,6 @@
     height: 100%;
   }
 
-  // Brand logo area
   &__brand {
     @include flex-row($space-2);
     flex-shrink: 0;
@@ -49,17 +42,15 @@
     }
   }
 
-  // Desktop navigation links
   &__links {
     @include flex-row($space-1);
-    display: none;  // hidden on mobile
+    display: none;
 
     @include md {
       display: flex;
     }
   }
 
-  // Individual nav link
   &__link {
     padding: $space-2 $space-4;
     border-radius: $radius-md;
@@ -75,20 +66,17 @@
       background: rgba($color-secondary, 0.05);
     }
 
-    // Active link (current page)
     &--active {
       color: $color-primary;
       background: rgba($color-primary, 0.07);
     }
   }
 
-  // Right side: cart + mobile hamburger
   &__actions {
     @include flex-row($space-3);
     flex-shrink: 0;
   }
 
-  // Cart button with badge
   &__cart {
     @include flex-row($space-2);
     @include btn-reset;
@@ -104,7 +92,6 @@
       transform: translateY(-1px);
     }
 
-    // Cart item count badge
     &-badge {
       min-width: 20px;
       height: 20px;
@@ -118,7 +105,6 @@
     }
   }
 
-  // Mobile hamburger button
   &__hamburger {
     @include btn-reset;
     @include flex-center;
@@ -130,7 +116,7 @@
     display: flex;
 
     @include md {
-      display: none;   // hidden on desktop
+      display: none;
     }
 
     &:hover {
@@ -138,7 +124,6 @@
     }
   }
 
-  // Mobile dropdown menu
   &__mobile-menu {
     display: none;
     position: absolute;
@@ -156,11 +141,10 @@
     }
 
     @include md {
-      display: none !important;  // never show on desktop
+      display: none !important;
     }
   }
 
-  // Mobile nav link (larger tap target)
   &__mobile-link {
     display: block;
     padding: $space-3 $space-4;
@@ -172,7 +156,8 @@
     transition: $transition-base;
     text-decoration: none;
 
-    &:hover, &--active {
+    &:hover,
+    &--active {
       color: $color-primary;
       background: rgba($color-primary, 0.07);
     }

@@ -4,33 +4,28 @@ import { useAuthStore } from '@/stores/authStore'
 
 const auth = useAuthStore()
 
-// Local template state
 const phoneDigits = ref('')
 const otp = ref('')
 const step = ref<'phone' | 'otp'>('phone')
 const isLoading = ref(false)
 const errorMessage = ref('')
 
-// Compute full phone number for verification message
 const phone = computed(() => {
   return `+94 ${phoneDigits.value}`
 })
 
-// Check if mobile number is valid (Sri Lankan mobile has exactly 9 digits starting with 7)
 const isPhoneValid = computed(() => {
   const digitsOnly = phoneDigits.value.replace(/\D/g, '')
   return digitsOnly.length === 9 && digitsOnly.startsWith('7')
 })
 
-// Check if OTP is valid (6 digits)
 const isOtpValid = computed(() => {
   return otp.value.trim().length === 6
 })
 
-// Auto-format phone input to 7X XXX XXXX format for Sri Lankan numbers
 function formatPhoneInput(event: Event) {
   const input = event.target as HTMLInputElement
-  let value = input.value.replace(/\D/g, '') // remove non-digits
+  let value = input.value.replace(/\D/g, '') 
   
   if (value.length > 0 && value.charAt(0) !== '7') {
     value = ''
@@ -54,7 +49,6 @@ function formatPhoneInput(event: Event) {
   phoneDigits.value = formatted
 }
 
-// Request OTP code
 async function sendOtp() {
   if (!isPhoneValid.value) {
     errorMessage.value = 'Please enter a valid mobile number.'
@@ -64,7 +58,6 @@ async function sendOtp() {
   isLoading.value = true
 
   try {
-    // Simulate API request to send SMS OTP code
     await new Promise((resolve) => setTimeout(resolve, 800))
     step.value = 'otp'
   } catch (e) {
@@ -74,7 +67,6 @@ async function sendOtp() {
   }
 }
 
-// Verify OTP code
 async function verifyOtp() {
   if (!isOtpValid.value) {
     errorMessage.value = 'OTP code must be 6 digits.'
@@ -85,11 +77,9 @@ async function verifyOtp() {
   isLoading.value = true
 
   try {
-    // Simulate verification delay
     await new Promise((resolve) => setTimeout(resolve, 800))
 
     if (otp.value.trim() === '123456') {
-      // Save exactly the 9 digits (no "+94")
       const cleanPhone = phoneDigits.value.replace(/\D/g, '')
       auth.login(cleanPhone)
       closeModal()
@@ -103,13 +93,11 @@ async function verifyOtp() {
   }
 }
 
-// Guest checkout bypass
 function continueAsGuest() {
   auth.hasSkippedPhone = true
   closeModal()
 }
 
-// Reset form and close
 function closeModal() {
   phoneDigits.value = ''
   otp.value = ''
@@ -118,7 +106,6 @@ function closeModal() {
   auth.showLoginModal = false
 }
 
-// Sign out
 function handleSignOut() {
   auth.logout()
   closeModal()
@@ -129,12 +116,10 @@ function handleSignOut() {
   <div v-if="auth.showLoginModal" class="login-modal-overlay">
     <div class="login-modal-card anim-scale-up">
       
-      <!-- Close Header button -->
       <button class="login-modal-card__close-btn" @click="closeModal" aria-label="Close modal">
         ✕
       </button>
 
-      <!-- LOGGED IN USER PROFILE STATE -->
       <div v-if="auth.isLoggedIn" class="login-modal-card__logged-in">
         <div class="login-modal-card__icon-container">
           👤
@@ -151,9 +136,7 @@ function handleSignOut() {
         </button>
       </div>
 
-      <!-- SIGN IN FLOW -->
       <div v-else>
-        <!-- STEP 1: Phone number prompt -->
         <div v-if="step === 'phone'" class="login-modal-card__step">
           <h2 class="login-modal-card__title">Sign In</h2>
           <p class="login-modal-card__subtitle">
@@ -189,7 +172,6 @@ function handleSignOut() {
               <span v-else>Send OTP</span>
             </button>
 
-            <!-- Option to continue as guest during checkout -->
             <button
               v-if="auth.isCheckoutTrigger"
               type="button"
@@ -201,7 +183,6 @@ function handleSignOut() {
           </form>
         </div>
 
-        <!-- STEP 2: OTP Prompt -->
         <div v-else-if="step === 'otp'" class="login-modal-card__step">
           <h2 class="login-modal-card__title">Verify Number</h2>
           <p class="login-modal-card__subtitle">
@@ -223,7 +204,6 @@ function handleSignOut() {
               />
             </div>
 
-            <!-- Testing Badge -->
             <div class="login-modal-card__test-badge">
               <span>💡 For testing, enter verification code <strong>123456</strong></span>
             </div>

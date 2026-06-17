@@ -29,7 +29,6 @@ function initGoogleTranslate() {
     document.body.appendChild(translateElement)
   }
 
-  // Define callback BEFORE appending script to prevent race conditions
   ;(window as any).googleTranslateElementInit = () => {
     new (window as any).google.translate.TranslateElement({
       pageLanguage: 'en',
@@ -46,7 +45,6 @@ function initGoogleTranslate() {
 }
 
 function changeLanguage(langCode: 'en' | 'de' | 'si') {
-  // Persist translation language selection via standard googtrans cookie
   const domain = window.location.hostname
   document.cookie = `googtrans=/en/${langCode}; path=/;`
   document.cookie = `googtrans=/en/${langCode}; path=/; domain=.${domain};`
@@ -58,7 +56,6 @@ function changeLanguage(langCode: 'en' | 'de' | 'si') {
     selectEl.dispatchEvent(new Event('change', { bubbles: true }))
     selectEl.dispatchEvent(new Event('click', { bubbles: true }))
   } else {
-    // If widget not fully loaded, cookie is set, reload will invoke translation instantly
     window.location.reload()
     return
   }
@@ -79,26 +76,21 @@ function handleProfileClick() {
   auth.showLoginModal = true
 }
 
-// Mobile menu open/close toggle
 const mobileOpen = ref(false)
 
-// Check if a given path is the current active route
 const isActive = (path: string) => route.path === path
 
-// Navigate to a page and close the mobile menu
 function navigate(path: string) {
   router.push(path)
   mobileOpen.value = false
 }
 
-// Nav links config aligned with the screenshot: Home, Shop, Contact Us
 const navLinks = [
   { label: 'Home',       path: '/' },
   { label: 'Shop',       path: '/products' },
   { label: 'Contact Us', path: '/contact' }
 ]
 
-// Dynamic transparency logic on scroll
 const isScrolled = ref(false)
 
 function handleScroll() {
@@ -109,7 +101,6 @@ function handleScroll() {
   }
 }
 
-// Reset state on route change
 watch(
   () => route.path,
   (newPath) => {
@@ -127,7 +118,6 @@ onMounted(() => {
   window.addEventListener('click', closeLangDropdown)
   handleScroll()
 
-  // Read googtrans cookie to display correct navbar language label on load
   const transCookie = getCookie('googtrans')
   if (transCookie.endsWith('/de')) currentLangLabel.value = 'De'
   else if (transCookie.endsWith('/si')) currentLangLabel.value = 'Si'
@@ -146,12 +136,10 @@ onUnmounted(() => {
   <header class="navbar" :class="{ 'navbar--transparent': !isScrolled }">
     <div class="navbar__inner">
 
-      <!-- Brand Logo (Left) -->
       <a class="navbar__brand" @click="navigate('/')">
         <img class="navbar__logo-img" src="@/assets/logoOriginal.png" alt="DineFlow Logo" />
       </a>
 
-      <!-- Desktop Nav Links (Center) -->
       <nav class="navbar__links">
         <a
           v-for="link in navLinks"
@@ -164,9 +152,7 @@ onUnmounted(() => {
         </a>
       </nav>
 
-      <!-- Right Actions (Language, Cart, Profile, Hamburger) -->
       <div class="navbar__actions">
-        <!-- Language Switcher -->
         <div
           class="navbar__language"
           @click.stop="showLangDropdown = !showLangDropdown"
@@ -176,7 +162,6 @@ onUnmounted(() => {
             <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
 
-          <!-- Dropdown Options -->
           <div v-show="showLangDropdown" class="navbar__language-dropdown">
             <button
               type="button"
@@ -205,7 +190,6 @@ onUnmounted(() => {
           </div>
         </div>
 
-        <!-- Cart Action Icon -->
         <button class="navbar__action-btn navbar__cart" @click="navigate('/cart')" aria-label="View Cart">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="action-svg">
             <circle cx="9" cy="21" r="1"></circle>
@@ -217,7 +201,6 @@ onUnmounted(() => {
           </span>
         </button>
 
-        <!-- Account Profile Action Icon -->
         <button
           class="navbar__action-btn navbar__profile"
           @click="handleProfileClick"
@@ -229,7 +212,6 @@ onUnmounted(() => {
           </svg>
         </button>
 
-        <!-- Mobile Hamburger Toggle -->
         <button
           class="navbar__hamburger"
           @click="mobileOpen = !mobileOpen"
@@ -240,7 +222,6 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <!-- Mobile Dropdown Menu -->
     <nav class="navbar__mobile-menu" :class="{ 'navbar__mobile-menu--open': mobileOpen }">
       <a
         v-for="link in navLinks"
@@ -270,7 +251,6 @@ onUnmounted(() => {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
   transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 
-  // Transparent variant when scroll is at top on homepage
   &--transparent {
     background: transparent;
     border-bottom: none;
@@ -339,13 +319,12 @@ onUnmounted(() => {
   }
 
   &__logo-img {
-    height: 52px; /* Visually balanced larger size for original logo */
+    height: 52px; 
     width: auto;
     object-fit: contain;
     display: block;
   }
 
-  // Centered navigation links on desktop
   &__links {
     display: none;
     @include md {
@@ -377,7 +356,6 @@ onUnmounted(() => {
     }
   }
 
-  // Right action controls
   &__actions {
     display: flex;
     align-items: center;
@@ -389,7 +367,6 @@ onUnmounted(() => {
     }
   }
 
-  // Language switcher
   &__language {
     position: relative;
     display: flex;
@@ -448,7 +425,6 @@ onUnmounted(() => {
     }
   }
 
-  // Action circular buttons (Cart, Profile)
   &__action-btn {
     @include btn-reset;
     @include flex-center;
@@ -487,7 +463,6 @@ onUnmounted(() => {
     padding: 0 2px;
   }
 
-  // Mobile Hamburger Toggle
   &__hamburger {
     @include btn-reset;
     @include flex-center;
@@ -508,7 +483,6 @@ onUnmounted(() => {
     }
   }
 
-  // Mobile dropdown menu styling
   &__mobile-menu {
     display: none;
     position: absolute;
@@ -550,7 +524,6 @@ onUnmounted(() => {
 </style>
 
 <style lang="scss">
-/* Hide standard Google Translate widget elements */
 #google_translate_element,
 .skiptranslate,
 iframe.skiptranslate,

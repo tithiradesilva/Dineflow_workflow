@@ -12,7 +12,6 @@ const fallbackImage = 'https://images.unsplash.com/photo-1568901346375-23c9450c5
 <template>
   <article class="product-card" :class="{ 'product-card--unavailable': !item.is_available }">
 
-    <!-- Image with its own border-radius, matching reference -->
     <div class="product-card__image-wrap">
       <img
         class="product-card__image"
@@ -22,12 +21,10 @@ const fallbackImage = 'https://images.unsplash.com/photo-1568901346375-23c9450c5
       />
     </div>
 
-    <!-- Text body below the image -->
     <div class="product-card__body">
       <h3 class="product-card__name">{{ item.name }}</h3>
       <p v-if="item.description" class="product-card__desc">{{ item.description }}</p>
 
-      <!-- Price row -->
       <div class="product-card__footer">
         <span class="product-card__price">$ {{ item.price.toFixed(2) }}</span>
 
@@ -38,7 +35,6 @@ const fallbackImage = 'https://images.unsplash.com/photo-1568901346375-23c9450c5
           :aria-label="item.is_available ? 'Add to Cart' : 'Sold Out'"
         >
           <span v-if="item.is_available" class="product-card__btn-inner">
-            <!-- Cart icon -->
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -53,7 +49,6 @@ const fallbackImage = 'https://images.unsplash.com/photo-1568901346375-23c9450c5
               <circle cx="20" cy="21" r="1"></circle>
               <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
             </svg>
-            <!-- Plus superscript -->
             <span class="plus-sign">+</span>
           </span>
           <span v-else class="sold-out-text">Sold</span>
@@ -66,14 +61,12 @@ const fallbackImage = 'https://images.unsplash.com/photo-1568901346375-23c9450c5
 
 <style lang="scss" scoped>
 .product-card {
-  // No card shadow/border — borderless layout, sits on white page
   background: transparent;
   display: flex;
   flex-direction: column;
   gap: 0;
   margin-top: 30px;
 
-  // Image has its own rounded corners — key feature of this design
   &__image-wrap {
     width: 100%;
     aspect-ratio: 1 / 1;
@@ -101,7 +94,6 @@ const fallbackImage = 'https://images.unsplash.com/photo-1568901346375-23c9450c5
     }
   }
 
-  // Text area — no card padding on left/right, sits flush
   &__body {
     padding: $space-3 0 0;
     display: flex;
@@ -132,7 +124,6 @@ const fallbackImage = 'https://images.unsplash.com/photo-1568901346375-23c9450c5
     margin: 0 0 $space-3;
   }
 
-  // Footer row: price left, button right
   &__footer {
     display: flex;
     justify-content: space-between;
@@ -140,7 +131,6 @@ const fallbackImage = 'https://images.unsplash.com/photo-1568901346375-23c9450c5
     margin-top: auto;
   }
 
-  // Orange bold price — "$ 22.23" with a space
   &__price {
     font-family: $font-heading;
     font-size: 1.6rem;
@@ -149,7 +139,6 @@ const fallbackImage = 'https://images.unsplash.com/photo-1568901346375-23c9450c5
     letter-spacing: 0;
   }
 
-  // Circular orange button with cart + plus
   &__add-btn {
     @include btn-reset;
     display: flex;
@@ -174,7 +163,6 @@ const fallbackImage = 'https://images.unsplash.com/photo-1568901346375-23c9450c5
     }
   }
 
-  // Inner: cart icon + "+" stacked
   &__btn-inner {
     display: flex;
     align-items: flex-end;
@@ -187,13 +175,12 @@ const fallbackImage = 'https://images.unsplash.com/photo-1568901346375-23c9450c5
     height: 22px;
   }
 
-  // Small "+" superscript at top-right of the cart
   .plus-sign {
     font-size: 11px;
     font-weight: 900;
     line-height: 1;
     margin-left: 1px;
-    margin-bottom: 6px; // lifts it to superscript position
+    margin-bottom: 6px;
   }
 
   .sold-out-text {

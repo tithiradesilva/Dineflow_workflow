@@ -8,22 +8,18 @@ const router = useRouter()
   <footer class="footer">
     <div class="footer__inner">
 
-      <!-- Logo -->
       <div class="footer__brand" @click="router.push('/')">
         <img class="footer__logo-img" src="@/assets/logoOriginal.png" alt="Dineflow Logo" />
       </div>
 
-      <!-- Links Column -->
       <div class="footer__column">
         <span class="footer__col-title">Links</span>
         <a class="footer__link" @click="router.push('/')">Terms of Service</a>
         <a class="footer__link" @click="router.push('/')">Privacy Policy</a>
       </div>
 
-      <!-- Divider -->
       <hr class="footer__divider" />
 
-      <!-- Bottom: Copyright -->
       <div class="footer__bottom">
         <span class="footer__bottom-text">
           &copy; 2024 Epit Global (Pvt) Ltd. All rights reserved.
@@ -38,7 +34,7 @@ const router = useRouter()
 @import url('https://fonts.googleapis.com/css2?family=Satisfy&display=swap');
 
 .footer {
-  background: #18181b; // Sleek premium dark gray (zinc-900)
+  background: #18181b; 
   color: rgba(255, 255, 255, 0.7);
   padding: $space-12 0 $space-6;
   text-align: center;
@@ -60,7 +56,7 @@ const router = useRouter()
   }
 
   &__logo-img {
-    height: 90px; /* Visually balanced height for the footer logo */
+    height: 90px;
     width: auto;
     object-fit: contain;
     display: block;
