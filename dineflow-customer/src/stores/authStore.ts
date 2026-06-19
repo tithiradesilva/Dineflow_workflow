@@ -2,7 +2,6 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
 export const useAuthStore = defineStore('auth', () => {
-  // Retrieve persisted user phone number if available
   const phoneNumber = ref(localStorage.getItem('dineflow_user_phone') || '')
 
   const showLoginModal = ref(false)
