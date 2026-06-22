@@ -3,11 +3,10 @@ import type { RouteRecordRaw } from 'vue-router'
 
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 
-// All public customer-facing routes
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    component: DefaultLayout,   // layout wraps all pages (navbar + footer)
+    component: DefaultLayout,
     children: [
       {
         path: '',
@@ -41,7 +40,7 @@ const routes: RouteRecordRaw[] = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  // Scroll to top on every route change
+
   scrollBehavior: () => ({ top: 0 })
 })
 

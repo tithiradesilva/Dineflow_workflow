@@ -11,10 +11,8 @@ const categories  = ref<Category[]>([])
 const searchQuery = ref('')
 const activeCategory = ref('All')
 
-// Carousel slider element reference
 const sliderRef = ref<HTMLElement | null>(null)
 
-// Load data on mount
 async function loadMenu() {
   try {
     const [items, cats] = await Promise.all([
@@ -24,7 +22,6 @@ async function loadMenu() {
     allItems.value   = items
     categories.value = cats
 
-    // Set default active category to first category if available
     if (cats.length > 0) {
       activeCategory.value = cats[0].name
     }
@@ -35,7 +32,6 @@ async function loadMenu() {
   }
 }
 
-// Map category names to high-quality Unsplash food images
 const categoryImageMap: Record<string, string> = {
   'Starters': 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=150&q=80',
   'Mains': 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=150&q=80',
@@ -49,7 +45,6 @@ const getCategoryImage = (name: string) => {
   return categoryImageMap[name] || 'https://images.unsplash.com/photo-1495521821757-a1efb6729352?auto=format&fit=crop&w=150&q=80'
 }
 
-// Category descriptions map
 const categoryDescMap: Record<string, string> = {
   'Starters': 'Includes chicken wings, cheese bites, fresh salads, and delicious soup starters.',
   'Mains': 'Includes rice plates, pasta bowls, noodles, and main meat selections.',
@@ -61,13 +56,11 @@ const getCategoryDescription = (name: string) => {
   return categoryDescMap[name] || 'Explore our variety of custom-made food items.'
 }
 
-// Count items in each category
 const getCategoryItemCount = (catName: string) => {
   const count = allItems.value.filter(item => item.category === catName).length
   return `${count} Items`
 }
 
-// Carousel slider left/right buttons
 function scrollSlider(direction: 'left' | 'right') {
   if (sliderRef.value) {
     const scrollAmount = direction === 'left' ? -260 : 260
@@ -75,7 +68,6 @@ function scrollSlider(direction: 'left' | 'right') {
   }
 }
 
-// Scroll to the selected category section and set active
 function selectCategory(catName: string) {
   if (searchQuery.value) {
     searchQuery.value = ''
@@ -95,7 +87,6 @@ function selectCategory(catName: string) {
   }, 50)
 }
 
-// Items grouped by category (for stacked view)
 const groupedItems = computed(() => {
   const groups: Record<string, MenuItem[]> = {}
   categories.value.forEach(cat => {
@@ -104,7 +95,6 @@ const groupedItems = computed(() => {
   return groups
 })
 
-// Search results (used only when search query is entered)
 const searchResults = computed(() => {
   if (!searchQuery.value) return []
   return allItems.value.filter(item =>
@@ -119,13 +109,11 @@ onMounted(loadMenu)
 <template>
   <div class="products-page">
 
-    <!-- Page Header (Centered) -->
     <div class="products-page__header">
       <div class="container">
         <span class="products-page__category-count">{{ categories.length }} Categories</span>
         <h1 class="products-page__title">Our Food Items</h1>
         
-        <!-- Premium Centered Search Bar -->
         <div class="products-page__search-wrap">
           <span class="products-page__search-icon">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -143,7 +131,6 @@ onMounted(loadMenu)
       </div>
     </div>
 
-    <!-- Category Slider Plane — full-width white band -->
     <div v-if="!isLoading && !searchQuery && categories.length > 0" class="products-page__carousel-plane">
       <div class="products-page__carousel-inner">
         <button class="slider-arrow" @click="scrollSlider('left')" aria-label="Scroll left">
@@ -177,10 +164,8 @@ onMounted(loadMenu)
       </div>
     </div>
 
-    <!-- Main Content Container -->
     <div class="container">
 
-      <!-- Loading skeletons -->
       <div v-if="isLoading" class="products-page__loading-sections">
         <div v-for="s in 2" :key="s" class="skeleton-section">
           <div class="skeleton-title"></div>
@@ -191,10 +176,8 @@ onMounted(loadMenu)
         </div>
       </div>
 
-      <!-- Error State -->
       <div v-else-if="error" class="products-page__error">{{ error }}</div>
 
-      <!-- Search Results Mode -->
       <div v-else-if="searchQuery" class="products-page__results-section">
         <h2 class="products-page__section-title">Search Results for "{{ searchQuery }}"</h2>
         <p class="products-page__section-desc">Found {{ searchResults.length }} items matching your criteria.</p>
@@ -213,7 +196,6 @@ onMounted(loadMenu)
         </div>
       </div>
 
-      <!-- Standard Menu Mode (Grouped Categories Stacked) -->
       <div v-else class="products-page__menu-sections">
         <div
           v-for="cat in categories"
@@ -277,7 +259,6 @@ onMounted(loadMenu)
     margin-bottom: 40px;
   }
 
-  // Search box styling
   &__search-wrap {
     position: relative;
     max-width: 380px;
@@ -317,11 +298,6 @@ onMounted(loadMenu)
     }
   }
 
-  // =============================================
-  // CATEGORY CAROUSEL PLANE
-  // Full-width white band, arrows at edges
-  // =============================================
-
   &__carousel-plane {
     width: 100%;
     background: #ffffff;
@@ -346,13 +322,10 @@ onMounted(loadMenu)
     scroll-behavior: smooth;
     flex: 1;
     padding: $space-2 $space-1;
-
-    // Hide scrollbar
     scrollbar-width: none;
     &::-webkit-scrollbar { display: none; }
   }
 
-  // Arrow buttons — minimal circle style
   .slider-arrow {
     @include btn-reset;
     display: flex;
@@ -380,7 +353,6 @@ onMounted(loadMenu)
     }
   }
 
-  // Individual category circle items
   &__category-item {
     display: flex;
     flex-direction: column;
@@ -397,8 +369,8 @@ onMounted(loadMenu)
     width: 70px;
     height: 70px;
     border-radius: 50%;
-    border: 2.5px solid #e5e7eb;        // gray ring — inactive
-    background: #f3f4f6;                // light gray fill — inactive
+    border: 2.5px solid #e5e7eb;        
+    background: #f3f4f6;             
     overflow: hidden;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
     margin-bottom: 8px;
@@ -414,7 +386,7 @@ onMounted(loadMenu)
     font-family: $font-heading;
     font-size: 1.05rem;
     font-weight: 700;
-    color: #111827; // black for inactive
+    color: #111827;
     transition: color 0.2s ease;
     line-height: 1.2;
     margin-top: 8px;
@@ -423,13 +395,12 @@ onMounted(loadMenu)
   &__category-count-sub {
     font-family: $font-body;
     font-size: 0.9rem;
-    color: #9ca3af; // gray for inactive
+    color: #9ca3af; 
     transition: color 0.2s ease;
     margin-top: 5px;
     font-weight: 700;
   }
 
-  // Orange underline bar below inactive (hidden)
   &__category-underline {
     height: 2.5px;
     width: 40px;
@@ -439,27 +410,25 @@ onMounted(loadMenu)
     transition: background 0.2s ease;
   }
 
-  // ---- Active State ----
   &__category-item--active {
     .products-page__category-circle {
-      border-color: #f97316;                      // orange ring
-      box-shadow: 0 0 0 3px rgba(#f97316, 0.15); // soft glow
+      border-color: #f97316;                      
+      box-shadow: 0 0 0 3px rgba(#f97316, 0.15); 
     }
 
     .products-page__category-name {
-      color: #f97316; // orange text
+      color: #f97316; 
     }
 
     .products-page__category-count-sub {
-      color: #f97316; // orange count
+      color: #f97316;
     }
 
     .products-page__category-underline {
-      background: #f97316; // orange bar
+      background: #f97316; 
     }
   }
 
-  // Results section styling
   &__results-section {
     padding-top: $space-6;
     
@@ -477,7 +446,6 @@ onMounted(loadMenu)
     }
   }
 
-  // Section styling for category groupings
   &__section {
     padding-top: $space-8;
     margin-bottom: $space-10;
@@ -504,7 +472,6 @@ onMounted(loadMenu)
     margin-top: 16px;
   }
 
-  // Products grid (4 columns layout matching reference)
   &__grid {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
@@ -527,7 +494,6 @@ onMounted(loadMenu)
     color: #6b7280;
     background: #ffffff;
     border-radius: $radius-lg;
-    // border: 1px solid rgba(0, 0, 0, 0.03);
   }
 
   &__empty-icon {
@@ -558,7 +524,6 @@ onMounted(loadMenu)
     font-weight: 600;
   }
 
-  // Skeleton shimmer loaders
   &__loading-sections {
     display: flex;
     flex-direction: column;

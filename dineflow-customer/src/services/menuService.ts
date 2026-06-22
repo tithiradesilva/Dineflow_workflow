@@ -1,7 +1,5 @@
 import { supabase } from '@/lib/supabaseClient'
 
-// --- Type Definitions ---
-
 export interface Category {
   id: number
   name: string
@@ -13,17 +11,14 @@ export interface MenuItem {
   description: string | null
   price: number
   image: string | null
-  category: string       // resolved category name (not ID)
+  category: string
   is_available: boolean
   track_stock: boolean
   quantity: number
 }
 
-// --- Menu Service ---
-
 export const menuService = {
 
-  // Fetch all categories (used for filter tabs on ProductsPage)
   async getCategories(): Promise<Category[]> {
     const { data, error } = await supabase
       .from('categories')
@@ -34,17 +29,15 @@ export const menuService = {
     return data as Category[]
   },
 
-  // Fetch all available menu items, joining category name from categories table
   async getMenuItems(): Promise<MenuItem[]> {
     const { data, error } = await supabase
       .from('menu_items')
       .select('*, categories(name)')
-      .eq('is_available', true)       // only show available items to customers
+      .eq('is_available', true)
       .order('id', { ascending: false })
 
     if (error) throw error
 
-    // Flatten the nested categories object into a plain string
     return (data || []).map((item: any) => ({
       id: item.id,
       name: item.name,

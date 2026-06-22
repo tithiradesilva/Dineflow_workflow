@@ -7,7 +7,6 @@ const router = useRouter()
 <template>
   <div class="home">
 
-    <!-- ===== HERO SECTION ===== -->
     <section class="hero">
       <div class="hero__inner">
         <div class="hero__content anim-fade-in">
@@ -20,9 +19,7 @@ const router = useRouter()
           </div>
         </div>
 
-        <!-- ===== FEATURES STRIP ===== -->
         <div class="hero__features">
-          <!-- Feature 1 -->
           <div class="hero__feature">
             <div class="hero__feature-icon-wrap">
               <svg class="hero__feature-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -37,7 +34,6 @@ const router = useRouter()
             </div>
           </div>
 
-          <!-- Feature 2 -->
           <div class="hero__feature">
             <div class="hero__feature-icon-wrap">
               <svg class="hero__feature-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -52,7 +48,6 @@ const router = useRouter()
             </div>
           </div>
 
-          <!-- Feature 3 -->
           <div class="hero__feature">
             <div class="hero__feature-icon-wrap">
               <svg class="hero__feature-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -67,7 +62,6 @@ const router = useRouter()
             </div>
           </div>
 
-          <!-- Feature 4 -->
           <div class="hero__feature">
             <div class="hero__feature-icon-wrap">
               <svg class="hero__feature-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -84,7 +78,6 @@ const router = useRouter()
       </div>
     </section>
 
-    <!-- ===== ABOUT US SECTION ===== -->
     <section class="about">
       <div class="container">
         <p class="about__eyebrow">About Us</p>
@@ -107,7 +100,6 @@ const router = useRouter()
             </p>
           </div>
           <div class="about__images">
-            <!-- Overlapping, tilted images matching polaroid style -->
             <div class="about__photo-card about__photo-card--back">
               <img
                 class="about__img"
@@ -127,7 +119,6 @@ const router = useRouter()
       </div>
     </section>
 
-    <!-- ===== MOBILE APP SECTION ===== -->
     <section class="mobile-app">
       <div class="container">
         <div class="mobile-app__card">
@@ -142,11 +133,9 @@ const router = useRouter()
               We look forward to seeing you !
             </p>
             <div class="mobile-app__badges">
-              <!-- Google Play Badge -->
               <a href="#" class="mobile-app__badge-link" aria-label="Get it on Google Play">
                 <img class="mobile-app__badge-img" src="@/assets/Play Store 1.png" alt="Get it on Google Play" />
               </a>
-              <!-- App Store Badge -->
               <a href="#" class="mobile-app__badge-link" aria-label="Download on the App Store">
                 <img class="mobile-app__badge-img" src="@/assets/App Store 1.png" alt="Download on the App Store" />
               </a>
@@ -167,15 +156,11 @@ const router = useRouter()
 </template>
 
 <style lang="scss" scoped>
-// ============================================================
-// HERO SECTION
-// ============================================================
 .hero {
   position: relative;
   min-height: 100vh;
   margin-top: -$navbar-height;
   padding-top: $navbar-height;
-  // Deep overlay over a blurred background food image
   background:
     linear-gradient(to bottom, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.5) 60%, rgba(0, 0, 0, 0.75) 100%),
     url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1600&q=80') center / cover no-repeat;
@@ -221,11 +206,10 @@ const router = useRouter()
     letter-spacing: -1.5px;
 
     &--accent {
-      color: #ee5a13; // Deep orange brand color from screenshot
+      color: #ee5a13; 
     }
   }
 
-  // Hero CTA Search Row
   &__search {
     display: flex;
     align-items: center;
@@ -260,7 +244,6 @@ const router = useRouter()
     }
   }
 
-  // Bottom Features Bar
   &__features {
     display: flex;
     align-items: center;
@@ -318,9 +301,6 @@ const router = useRouter()
   }
 }
 
-// ============================================================
-// ABOUT US SECTION
-// ============================================================
 .about {
   background: #ffffff;
   padding: $space-16 0 90px;
@@ -420,15 +400,12 @@ const router = useRouter()
   }
 }
 
-// ============================================================
-// MOBILE APP SECTION
-// ============================================================
 .mobile-app {
   background: #ffffff;
   padding: 100px 0 80px;
 
   &__card {
-    background: #f7f7f7; // Light premium grey background card
+    background: #f7f7f7; 
     border-radius: $radius-xl;
     padding: $space-12 clamp($space-6, 6vw, $space-16) $space-10;
     display: grid;
@@ -500,7 +477,7 @@ const router = useRouter()
     display: block;
     object-fit: contain;
     mix-blend-mode: multiply;
-    margin: -15px -10px -40px -10px; /* Offset the large transparent margins of the PNG assets */
+    margin: -15px -10px -40px -10px;
   }
 
   &__image-wrap {
@@ -515,7 +492,7 @@ const router = useRouter()
       right: $space-8;
       bottom: 0;
       width: 350px;
-      height: 125%; // Overflow card container upwards
+      height: 125%; 
     }
   }
 

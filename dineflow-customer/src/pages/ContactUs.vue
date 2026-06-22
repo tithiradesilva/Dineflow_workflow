@@ -14,13 +14,11 @@ async function handleSubmit() {
   if (!form.value.name || !form.value.email || !form.value.description) return
   isSubmitting.value = true
   
-  // Simulate API post
   await new Promise((resolve) => setTimeout(resolve, 800))
   
   submitted.value = true
   isSubmitting.value = false
   
-  // Reset form
   form.value = {
     name: '',
     email: '',
@@ -32,7 +30,6 @@ async function handleSubmit() {
 <template>
   <div class="contact-page">
     
-    <!-- Page Header (Centered) -->
     <div class="contact-page__header">
       <div class="container">
         <span class="contact-page__category-count">Contact Us</span>
@@ -40,11 +37,9 @@ async function handleSubmit() {
       </div>
     </div>
 
-    <!-- Contact Info Cards Grid -->
     <div class="container">
       <div class="contact-page__grid">
         
-        <!-- Address Card -->
         <div class="contact-card">
           <div class="contact-card__icon-wrap">
             <svg class="contact-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -65,7 +60,6 @@ async function handleSubmit() {
           </div>
         </div>
 
-        <!-- Phone Card -->
         <div class="contact-card">
           <div class="contact-card__icon-wrap">
             <svg class="contact-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -85,7 +79,6 @@ async function handleSubmit() {
           </div>
         </div>
 
-        <!-- Email Card -->
         <div class="contact-card">
           <div class="contact-card__icon-wrap">
             <svg class="contact-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -112,7 +105,6 @@ async function handleSubmit() {
 
       </div>
 
-    <!-- Social Media Panel -->
       <div class="contact-page__social">
         <h2 class="contact-page__social-title">Connect with Us on Social Media</h2>
         <div class="contact-page__social-icons">
@@ -143,11 +135,9 @@ async function handleSubmit() {
 
     </div>
 
-    <!-- Map and Help Form Section -->
     <div class="container">
       <div class="contact-page__split">
         
-        <!-- Left: Map Container -->
         <div class="contact-page__map-container">
           <iframe
             src="https://maps.google.com/maps?q=Habibi,%20Goltzstraße%2024,%2010781%20Berlin,%20Germany&t=&z=16&ie=UTF8&iwloc=&output=embed"
@@ -160,7 +150,6 @@ async function handleSubmit() {
           ></iframe>
         </div>
 
-        <!-- Right: Help Form -->
         <div class="help-form">
           <h2 class="help-form__title">You need help?</h2>
           <p class="help-form__subtitle">We will contact you</p>
@@ -207,7 +196,6 @@ async function handleSubmit() {
             </div>
           </form>
 
-          <!-- Success State -->
           <div v-else class="help-form__success">
             <span class="help-form__success-icon">✓</span>
             <h3 class="help-form__success-title">Message Sent!</h3>
@@ -238,7 +226,7 @@ async function handleSubmit() {
     font-family: $font-heading;
     font-size: 1.0rem;
     font-weight: 700;
-    color: #4e4e4e; // Orange count color
+    color: #4e4e4e;
     letter-spacing: 0.5px;
     display: inline-block;
     margin-bottom: $space-2;
@@ -263,7 +251,6 @@ async function handleSubmit() {
     font-weight: 500;
   }
 
-  // Cards Grid
   &__grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -275,7 +262,6 @@ async function handleSubmit() {
     }
   }
 
-  // Split Section Layout
   &__split {
     display: grid;
     grid-template-columns: 1fr;
@@ -303,9 +289,8 @@ async function handleSubmit() {
     }
   }
 
-  // Social Media Panel
   &__social {
-    background: #18181b; // Dark premium background
+    background: #18181b;
     border-radius: $radius-xl;
     padding: $space-10 $space-6;
     padding-top: 90px;
@@ -333,7 +318,7 @@ async function handleSubmit() {
   }
 
   .social-link {
-    color: #f97316; // Orange icons
+    color: #f97316; 
     transition: $transition-fast;
     display: flex;
     align-items: center;
@@ -345,13 +330,12 @@ async function handleSubmit() {
     }
 
     &:hover {
-      color: #ea580c; // Darker orange on hover
+      color: #ea580c; 
       transform: translateY(-2px);
     }
   }
 }
 
-// Contact Card Component styling
 .contact-card {
   @include flex-col($space-6);
   align-items: center;
@@ -362,8 +346,8 @@ async function handleSubmit() {
     width: 100px;
     height: 100px;
     border-radius: $radius-full;
-    background: #f97316; // Orange circle background
-    color: #ffffff; // White icon color
+    background: #f97316; 
+    color: #ffffff;
     @include flex-center;
     box-shadow: 0 4px 14px rgba(249, 115, 22, 0.2);
   }
@@ -411,7 +395,6 @@ async function handleSubmit() {
   }
 }
 
-// Help Form component styling
 .help-form {
   background: #ffffff;
   padding: $space-8 $space-6;
@@ -491,7 +474,7 @@ async function handleSubmit() {
   &__submit-btn {
     width: 160px;
     height: 48px;
-    background: #f97316; // Solid orange
+    background: #f97316;
     color: #ffffff;
     border: none;
     border-radius: $radius-md;
@@ -518,7 +501,6 @@ async function handleSubmit() {
     }
   }
 
-  // Success State styles
   &__success {
     @include flex-col($space-4);
     align-items: center;

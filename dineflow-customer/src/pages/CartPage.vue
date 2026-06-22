@@ -7,10 +7,8 @@ import { useCartStore } from '@/stores/cartStore'
 const router = useRouter()
 const cart   = useCartStore()
 
-// Convenience: check if cart is empty
 const isEmpty = computed(() => cart.items.length === 0)
 
-// Tax rate (5%) and total with tax
 const tax   = computed(() => cart.totalPrice * 0.05)
 const grand = computed(() => cart.totalPrice + tax.value)
 </script>
@@ -19,7 +17,6 @@ const grand = computed(() => cart.totalPrice + tax.value)
   <div class="cart-page">
     <div class="container">
 
-      <!-- Page Title -->
       <div class="cart-page__header">
         <p class="cart-page__sub">
           {{ cart.totalItems }} {{ cart.totalItems === 1 ? 'item' : 'items' }}
@@ -27,7 +24,6 @@ const grand = computed(() => cart.totalPrice + tax.value)
         <h1 class="cart-page__title">Your Cart</h1>
       </div>
 
-      <!-- Empty Cart State -->
       <div v-if="isEmpty" class="cart-page__empty">
         <img src="@/assets/EmptyItemsIcon.png" alt="Empty Cart" class="cart-page__empty-icon" />
         <h2>Your cart is empty</h2>
@@ -37,10 +33,8 @@ const grand = computed(() => cart.totalPrice + tax.value)
         </button>
       </div>
 
-      <!-- Cart Content -->
       <div v-else class="cart-page__content">
 
-        <!-- Left: Cart Items List -->
         <div class="cart-page__items">
           <CartItem
             v-for="item in cart.items"
@@ -49,7 +43,6 @@ const grand = computed(() => cart.totalPrice + tax.value)
           />
         </div>
 
-        <!-- Right: Order Summary Panel -->
         <aside class="cart-page__summary">
           <h2 class="cart-page__summary-title">Order Summary</h2>
 
@@ -115,7 +108,6 @@ const grand = computed(() => cart.totalPrice + tax.value)
     margin-bottom: 16px;
   }
 
-  // Empty state
   &__empty {
     @include flex-col($space-4);
     align-items: center;
@@ -147,7 +139,6 @@ const grand = computed(() => cart.totalPrice + tax.value)
     }
   }
 
-  // Two-column layout: items list + summary panel
   &__content {
     display: grid;
     grid-template-columns: 1fr;
@@ -159,12 +150,10 @@ const grand = computed(() => cart.totalPrice + tax.value)
     }
   }
 
-  // Cart items list
   &__items {
     @include flex-col($space-4);
   }
 
-  // Summary panel (sticky on desktop)
   &__summary {
     @include card($radius-xl, $shadow-md);
     padding: $space-6;

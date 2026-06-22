@@ -1,15 +1,13 @@
 import { supabase } from '@/lib/supabaseClient'
 
-// --- Type Definitions ---
-
 export interface CartItemPayload {
   menu_item_id: number
   quantity: number
-  price: number          // price at time of order (snapshot)
+  price: number
 }
 
 export interface PlaceOrderPayload {
-  table_name: string     // e.g. "Table 3"
+  table_name: string
   items: CartItemPayload[]
   total: number
   payment_method: 'card' | 'cash'
@@ -27,13 +25,10 @@ export interface Order {
   created_at: string
 }
 
-// --- Order Service ---
-
 export const orderService = {
 
-  // Place a new order — inserts into orders, then order_items
   async placeOrder(payload: PlaceOrderPayload): Promise<Order> {
-    // Step 1: Create the parent order row
+
     const { data: orderData, error: orderError } = await supabase
       .from('orders')
       .insert([{
@@ -53,7 +48,6 @@ export const orderService = {
 
     const orderId = orderData.id
 
-    // Step 2: Insert all order items linked to this order
     const orderItems = payload.items.map(item => ({
       order_id: orderId,
       menu_item_id: item.menu_item_id,
@@ -70,7 +64,6 @@ export const orderService = {
     return orderData as Order
   },
 
-  // Track order status by order ID (for post-checkout status tracking)
   async getOrderStatus(orderId: number): Promise<'Preparing' | 'Ready' | 'Delivered'> {
     const { data, error } = await supabase
       .from('orders')

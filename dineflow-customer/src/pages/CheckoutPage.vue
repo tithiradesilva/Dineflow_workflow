@@ -17,13 +17,11 @@ onMounted(() => {
   }
 })
 
-// Customer Details
 const tableName  = ref('')
 const isSubmitting = ref(false)
 const error      = ref('')
 const successOrderId = ref<number | null>(null)
 
-// Coupon Codes
 const couponCode = ref('')
 const appliedCoupon = ref('')
 const couponDiscount = ref(0)
@@ -52,7 +50,6 @@ async function claimCoupon() {
   }
 }
 
-// Payment details
 const paymentMethod = ref<'card' | 'cash'>('card')
 const cardName = ref('')
 const cardNumber = ref('')
@@ -77,7 +74,6 @@ function handleCardExpiryInput(event: Event) {
   const input = event.target as HTMLInputElement
   let value = input.value.replace(/\D/g, '')
   
-  // 1. Format single digit starting months
   if (value.length > 0) {
     const firstChar = value.charAt(0)
     if (firstChar !== '0' && firstChar !== '1' && value.length === 1) {
@@ -85,33 +81,30 @@ function handleCardExpiryInput(event: Event) {
     }
   }
   
-  // 2. Validate month digits (must be 01-12)
   if (value.length >= 2) {
     const month = value.slice(0, 2)
     const monthNum = parseInt(month, 10)
     if (monthNum > 12 || month === '00') {
-      value = value.slice(0, 1) // reject invalid month second digit
+      value = value.slice(0, 1) 
     }
   }
 
-  // 3. Validate year first digit (must be >= 2 for years 2026+)
   if (value.length >= 3) {
     const firstYearDigit = parseInt(value.charAt(2), 10)
     if (firstYearDigit < 2) {
-      value = value.slice(0, 2) // reject invalid year prefix
+      value = value.slice(0, 2) 
     }
   }
 
-  // 4. Validate complete year (must be between current year and 15 years in the future)
   if (value.length >= 4) {
     const year = parseInt(value.slice(2, 4), 10)
     const month = parseInt(value.slice(0, 2), 10)
     const now = new Date()
-    const currentYear = now.getFullYear() % 100 // e.g. 26
-    const currentMonth = now.getMonth() + 1 // 1-indexed month
-    const maxYear = currentYear + 15 // maximum 15 years in the future (e.g. 41)
+    const currentYear = now.getFullYear() % 100 
+    const currentMonth = now.getMonth() + 1 
+    const maxYear = currentYear + 15 
     if (year < currentYear || year > maxYear || (year === currentYear && month < currentMonth)) {
-      value = value.slice(0, 3) // reject expired/invalid future year/month combination
+      value = value.slice(0, 3)
     }
   }
   
@@ -135,14 +128,12 @@ function handleCardCvvInput(event: Event) {
   cardCvv.value = value
 }
 
-// Tax + grand total calculations
 const tax   = computed(() => cart.totalPrice * 0.05)
 const grand = computed(() => {
   const t = cart.totalPrice + tax.value - couponDiscount.value
   return Math.max(0, t)
 })
 
-// Place the order via Supabase
 async function placeOrder() {
   if (!tableName.value.trim()) {
     error.value = 'Please enter your table number.'
@@ -205,7 +196,6 @@ async function placeOrder() {
   <div class="checkout-page">
     <div class="container">
 
-      <!-- Success State (shown after order is placed) -->
       <div v-if="successOrderId" class="checkout-page__success anim-slide-up">
         <span class="checkout-page__success-icon">🎉</span>
         <h1>Order Placed!</h1>
@@ -215,9 +205,7 @@ async function placeOrder() {
         </button>
       </div>
 
-      <!-- Checkout Form -->
       <div v-else>
-        <!-- Page Title Header (matching Cart page style) -->
         <div class="checkout-page__header">
           <p class="checkout-page__sub">
             {{ cart.totalItems }} {{ cart.totalItems === 1 ? 'item' : 'items' }}
@@ -226,10 +214,8 @@ async function placeOrder() {
         </div>
 
         <div class="checkout-page__layout">
-          <!-- Left: Forms, Coupon, Payment -->
           <div class="checkout-page__left">
             
-            <!-- 1. Order Review (Allows Removing Items / Going to Cart) -->
             <div class="checkout-page__section-card">
               <h2 class="checkout-page__section-title">Order Review</h2>
               <div v-if="cart.items.length === 0" class="checkout-page__empty">
@@ -251,7 +237,6 @@ async function placeOrder() {
                     <span class="checkout-page__item-qty-price">${{ item.price.toFixed(2) }} x {{ item.cartQty }}</span>
                   </div>
 
-                  <!-- Price & Remove button -->
                   <div class="checkout-page__item-right">
                     <span class="checkout-page__item-price">
                       ${{ (item.price * item.cartQty).toFixed(2) }}
@@ -264,7 +249,6 @@ async function placeOrder() {
               </div>
             </div>
 
-            <!-- 2. Table Details -->
             <div class="checkout-page__section-card">
               <h2 class="checkout-page__section-title">Your Table Number or Name</h2>
               <div class="checkout-page__field">
@@ -280,7 +264,6 @@ async function placeOrder() {
               </div>
             </div>
 
-            <!-- 3. Promo Coupon Section -->
             <div class="checkout-page__section-card">
               <h2 class="checkout-page__section-title">Promo Coupon</h2>
               <div class="checkout-page__coupon-group">
@@ -303,7 +286,6 @@ async function placeOrder() {
               <p v-if="couponError" class="checkout-page__coupon-error">{{ couponError }}</p>
             </div>
 
-            <!-- 4. Cash or Card Options -->
             <div class="checkout-page__section-card">
               <h2 class="checkout-page__section-title">Payment Method</h2>
               
@@ -326,7 +308,6 @@ async function placeOrder() {
                 </button>
               </div>
 
-              <!-- Card Details -->
               <div v-if="paymentMethod === 'card'" class="checkout-page__card-fields">
                 <div class="checkout-page__field">
                   <label class="checkout-page__label">Cardholder Name</label>
@@ -376,7 +357,6 @@ async function placeOrder() {
                 </div>
               </div>
 
-              <!-- Cash Message (Simple Visible Text, No Box) -->
               <div v-else class="checkout-page__cash-message">
                 <p>Ready to provide cash at the counter</p>
               </div>
@@ -384,7 +364,6 @@ async function placeOrder() {
 
           </div>
 
-          <!-- Right side: Sticky Order Summary (Total Order Area) -->
           <aside class="checkout-page__summary">
             <h2 class="checkout-page__summary-title">Order Summary</h2>
 
@@ -407,7 +386,6 @@ async function placeOrder() {
               </div>
             </div>
 
-            <!-- Error message (Simple visible text, no box) -->
             <p v-if="error" class="checkout-page__error">{{ error }}</p>
 
             <button
@@ -419,7 +397,6 @@ async function placeOrder() {
               <span v-else>Place Order</span>
             </button>
 
-            <!-- Back to Cart Option to edit items -->
             <button
               class="checkout-page__back-to-cart-btn"
               @click="router.push('/cart')"
@@ -467,7 +444,6 @@ async function placeOrder() {
     margin-bottom: 16px;
   }
 
-  // --- Success Screen ---
   &__success {
     @include flex-col($space-4);
     align-items: center;
@@ -507,7 +483,6 @@ async function placeOrder() {
     }
   }
 
-  // --- Two-column layout ---
   &__layout {
     display: grid;
     grid-template-columns: 1fr;
@@ -612,7 +587,6 @@ async function placeOrder() {
     &:hover { color: $color-danger; text-decoration: underline}
   }
 
-  // --- Form Controls & Fields ---
   &__field {
     @include flex-col($space-2);
     margin-bottom: $space-4;
@@ -663,7 +637,6 @@ async function placeOrder() {
     }
   }
 
-  // --- Coupon Styles ---
   &__coupon-group {
     display: flex;
     gap: $space-3;
@@ -700,7 +673,6 @@ async function placeOrder() {
     font-weight: 600;
   }
 
-  // --- Payment Switcher ---
   &__payment-selector {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -745,7 +717,6 @@ async function placeOrder() {
     display: block;
   }
 
-  // --- Sticky Summary Panel ---
   &__summary {
     @include card($radius-xl, $shadow-md);
     padding: $space-6;
